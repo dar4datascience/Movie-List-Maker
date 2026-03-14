@@ -54,13 +54,14 @@ class AudioOnlyProcessor:
         
         return text
     
-    def generate_llm_prompt(self, transcription: str, language: str = 'en') -> str:
+    def generate_llm_prompt(self, transcription: str, language: str = 'en', expected_count: int = None) -> str:
         """
         Generate prompt for LLM to extract movie titles.
         
         Args:
             transcription: Full audio transcription
             language: Language of transcription
+            expected_count: Expected number of movies (helps LLM)
             
         Returns:
             Formatted prompt for LLM
@@ -70,15 +71,18 @@ class AudioOnlyProcessor:
             'es': 'The transcription is in Spanish (español).'
         }.get(language, 'The transcription may be in English or Spanish.')
         
+        count_instruction = f"\nExpected number of movies: {expected_count}" if expected_count else ""
+        task_5 = f"\n5. Extract exactly {expected_count} movie titles" if expected_count else ""
+        
         prompt = f"""You are a movie title extraction assistant. Below is an audio transcription from a video showing movie covers with spoken titles.
 
-{lang_instruction}
+{lang_instruction}{count_instruction}
 
 Your task:
 1. Extract all movie titles mentioned in the transcription
 2. Return them as a numbered list
 3. Clean up any transcription errors
-4. Preserve the original language of the titles
+4. Preserve the original language of the titles{task_5}
 
 Transcription:
 {transcription}
@@ -87,7 +91,7 @@ Please provide a numbered list of movie titles (one per line):"""
         
         return prompt
     
-    def save_for_llm_processing(self, transcription: str, output_path: str, language: str = 'en'):
+    def save_for_llm_processing(self, transcription: str, output_path: str, language: str = 'en', expected_count: int = None):
         """
         Save transcription and prompt for LLM processing.
         
@@ -96,7 +100,7 @@ Please provide a numbered list of movie titles (one per line):"""
             output_path: Path to save output
             language: Detected language
         """
-        prompt = self.generate_llm_prompt(transcription, language)
+        prompt = self.generate_llm_prompt(transcription, language, expected_count)
         
         output_data = {
             'transcription': transcription,

@@ -127,6 +127,12 @@ Examples:
         help='Audio-only mode: extract transcription and generate LLM prompt (no OCR)'
     )
     
+    parser.add_argument(
+        '--expected-movies',
+        type=int,
+        help='Expected number of movies in video (optimizes scene detection and validation)'
+    )
+    
     args = parser.parse_args()
     
     for video_path in args.videos:
@@ -182,7 +188,8 @@ Examples:
         output_dir=args.output_dir,
         quarto_dir=args.quarto_dir,
         language=language,
-        auto_detect_language=auto_detect
+        auto_detect_language=auto_detect,
+        expected_movie_count=args.expected_movies
     )
     
     if len(args.videos) == 1 and args.oleada:

@@ -26,7 +26,8 @@ class MovieProcessor:
         output_dir: str = 'output',
         quarto_dir: str = 'quarto_site',
         language: str = None,
-        auto_detect_language: bool = True
+        auto_detect_language: bool = True,
+        expected_movie_count: int = None
     ):
         """
         Initialize movie processor with all components.
@@ -53,8 +54,12 @@ class MovieProcessor:
         self.output_dir = output_dir
         self.quarto_dir = quarto_dir
         self.language = language
+        self.expected_movie_count = expected_movie_count
         
         Path(output_dir).mkdir(parents=True, exist_ok=True)
+        
+        if expected_movie_count:
+            print(f"   Expected movies: {expected_movie_count} (system will optimize for this count)")
     
     def process_video(
         self,
@@ -84,7 +89,25 @@ class MovieProcessor:
             frames_dir = os.path.join(self.output_dir, f'oleada_{oleada_number:02d}_frames')
         
         print("📹 Step 1/5: Detecting scene changes...")
+        if self.expected_movie_count:
+            print(f"   Target: {self.expected_movie_count} movies")
+        
         scenes = self.video_processor.detect_scene_changes(video_path, threshold=30.0)
+        
+        # Adjust scene detection if we know expected count
+        if self.expected_movie_count and len(scenes) != self.expected_movie_count:
+            print(f"   ⚠️  Detected {len(scenes)} scenes but expected {self.expected_movie_count}")
+            print(f"   Adjusting scene detection threshold...")
+            
+            # Try different thresholds to match expected count
+            if len(scenes) > self.expected_movie_count:
+                # Too many scenes, increase threshold (less sensitive)
+                scenes = self.video_processor.detect_scene_changes(video_path, threshold=40.0)
+            else:
+                # Too few scenes, decrease threshold (more sensitive)
+                scenes = self.video_processor.detect_scene_changes(video_path, threshold=20.0)
+            
+            print(f"   Adjusted to {len(scenes)} scenes")
         
         if len(scenes) == 0:
             print("   ⚠️  No scenes detected, falling back to frame extraction")
@@ -136,10 +159,30 @@ class MovieProcessor:
         
         print(f"\n✅ Step 5/5: Matching and validating titles...")
         matched_titles = self.validator.match_titles(ocr_titles, audio_titles)
+        
+        # Validate against expected count
+        if self.expected_movie_count:
+            print(f"   Expected: {self.expected_movie_count} movies, Found: {len(matched_titles)} matches")
+            
+            if len(matched_titles) < self.expected_movie_count:
+                print(f"   ⚠️  Missing {self.expected_movie_count - len(matched_titles)} movies")
+                print(f"   Suggestion: Check if some scenes were missed or OCR/audio failed")
+            elif len(matched_titles) > self.expected_movie_count:
+                print(f"   ⚠️  Found {len(matched_titles) - self.expected_movie_count} extra matches")
+                print(f"   Filtering to top {self.expected_movie_count} by confidence...")
+                # Sort by confidence and keep top N
+                matched_titles = sorted(matched_titles, key=lambda x: x['confidence'], reverse=True)[:self.expected_movie_count]
+        
         validated_titles = self.validator.validate_and_resolve(
             matched_titles,
             interactive=interactive
         )
+        
+        # Final validation against expected count
+        if self.expected_movie_count and len(validated_titles) != self.expected_movie_count:
+            print(f"\n   ⚠️  Final count: {len(validated_titles)} (expected {self.expected_movie_count})")
+            if len(validated_titles) < self.expected_movie_count:
+                print(f"   Consider: --audio-only mode or manual review")
         
         print(f"\n📝 Step 6/6: Generating markdown output...")
         markdown_content = self.markdown_generator.generate_movie_list(
