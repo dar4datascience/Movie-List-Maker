@@ -56,12 +56,12 @@ class AudioOnlyProcessor:
     
     def generate_llm_prompt(self, transcription: str, language: str = 'en', expected_count: int = None) -> str:
         """
-        Generate prompt for LLM to extract movie titles.
+        Generate prompt for LLM to extract movie and TV show titles.
         
         Args:
             transcription: Full audio transcription
             language: Language of transcription
-            expected_count: Expected number of movies (helps LLM)
+            expected_count: Expected number of titles (helps LLM)
             
         Returns:
             Formatted prompt for LLM
@@ -71,23 +71,47 @@ class AudioOnlyProcessor:
             'es': 'The transcription is in Spanish (español).'
         }.get(language, 'The transcription may be in English or Spanish.')
         
-        count_instruction = f"\nExpected number of movies: {expected_count}" if expected_count else ""
-        task_5 = f"\n5. Extract exactly {expected_count} movie titles" if expected_count else ""
+        count_instruction = f"\nExpected number of titles: {expected_count}" if expected_count else ""
+        task_5 = f"\n5. Extract exactly {expected_count} titles" if expected_count else ""
         
-        prompt = f"""You are a movie title extraction assistant. Below is an audio transcription from a video showing movie covers with spoken titles.
+        # Language-specific error corrections
+        error_corrections = {
+            'es': '''
+Specific error corrections for Spanish transcription:
+- "Jóbul" → "Hubble telescope" (Jóbul is Hubble in Spanish)
+- "chicheniza" → "Chichén Itzá" (famous Mayan site)
+- "Si es Ayma y Ami" → "Sesame Street" (Plaza Sésamo)
+- "Gritos temuerte libertad" → "Gritos de muerte y libertad" (Mexican film)
+- "El encanto de la guila" → "El encanto del águila" (Mexican film)
+- "temuerte" → "muerte" (remove extra 'te')
+- "number once" → "number one" (English correction)
+- "Ley de l'orden" → "Ley y orden" (Law & Order)
+- "Wilma" → "Wanda" (possible Marvel reference)''',
+            'en': '''
+Common transcription errors to fix:
+- Remove extra letters like "temuerte" → "muerte"
+- Fix number words like "number once" → "number one"
+- Correct location names and famous references'''
+        }.get(language, '')
+        
+        prompt = f"""You are a movie and TV show title extraction assistant. Below is an audio transcription from a video showing movie/TV covers with spoken titles.
 
 {lang_instruction}{count_instruction}
 
 Your task:
-1. Extract all movie titles mentioned in the transcription
-2. Return them as a numbered list
-3. Clean up any transcription errors
-4. Preserve the original language of the titles{task_5}
+1. Extract ALL titles mentioned (movies, TV shows, documentaries)
+2. Include season information when mentioned (e.g., "primera temporada", "Temporada 4")
+3. Return them as a numbered list
+4. Clean up transcription errors using the specific corrections below
+5. Preserve the original language of the titles
+6. Format titles properly (capitalize correctly){task_5}
+
+{error_corrections}
 
 Transcription:
 {transcription}
 
-Please provide a numbered list of movie titles (one per line):"""
+Please provide a numbered list of titles (one per line), including both movies and TV shows with their seasons when mentioned:"""
         
         return prompt
     
