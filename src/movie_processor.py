@@ -1,4 +1,5 @@
 import os
+import cv2
 from typing import List, Dict, Optional
 from pathlib import Path
 
@@ -8,6 +9,7 @@ from .audio_transcriber import AudioTranscriber
 from .validator import MovieValidator
 from .markdown_generator import MarkdownGenerator
 from .quarto_generator import QuartoGenerator
+from .audio_only_processor import AudioOnlyProcessor
 
 
 class MovieProcessor:
@@ -22,7 +24,9 @@ class MovieProcessor:
         whisper_model: str = 'base',
         confidence_threshold: float = 0.90,
         output_dir: str = 'output',
-        quarto_dir: str = 'quarto_site'
+        quarto_dir: str = 'quarto_site',
+        language: str = None,
+        auto_detect_language: bool = True
     ):
         """
         Initialize movie processor with all components.
@@ -33,16 +37,22 @@ class MovieProcessor:
             confidence_threshold: Minimum confidence for auto-accept (0-1)
             output_dir: Directory for intermediate outputs
             quarto_dir: Directory for Quarto website
+            language: Specific language ('en', 'es', or None for auto-detect)
+            auto_detect_language: Enable automatic language detection
         """
         self.video_processor = VideoProcessor(frame_interval=frame_interval)
-        self.ocr_extractor = OCRExtractor()
-        self.audio_transcriber = AudioTranscriber(model_size=whisper_model)
+        self.ocr_extractor = OCRExtractor(auto_detect_language=auto_detect_language)
+        self.audio_transcriber = AudioTranscriber(
+            model_size=whisper_model,
+            auto_detect_language=auto_detect_language
+        )
         self.validator = MovieValidator(confidence_threshold=confidence_threshold)
         self.markdown_generator = MarkdownGenerator(output_dir=output_dir)
         self.quarto_generator = QuartoGenerator(project_dir=quarto_dir)
         
         self.output_dir = output_dir
         self.quarto_dir = quarto_dir
+        self.language = language
         
         Path(output_dir).mkdir(parents=True, exist_ok=True)
     
@@ -73,25 +83,65 @@ class MovieProcessor:
         if save_frames:
             frames_dir = os.path.join(self.output_dir, f'oleada_{oleada_number:02d}_frames')
         
-        print("📹 Step 1/5: Extracting frames from video...")
-        frames = self.video_processor.extract_frames(video_path, output_dir=frames_dir)
+        print("📹 Step 1/5: Detecting scene changes...")
+        scenes = self.video_processor.detect_scene_changes(video_path, threshold=30.0)
         
-        print(f"\n🔍 Step 2/5: Running OCR on {len(frames)} frames...")
-        ocr_titles = self.ocr_extractor.extract_movie_titles(frames)
+        if len(scenes) == 0:
+            print("   ⚠️  No scenes detected, falling back to frame extraction")
+            frames = self.video_processor.extract_frames(video_path, output_dir=frames_dir)
+            scene_timestamps = [f[1] for f in frames]
+        else:
+            print(f"\n📹 Step 2/5: Extracting representative frames from {len(scenes)} scenes...")
+            cap = cv2.VideoCapture(video_path)
+            scene_timestamps = []
+            
+            for scene in scenes:
+                cap.set(cv2.CAP_PROP_POS_FRAMES, scene['mid_frame_idx'])
+                ret, frame = cap.read()
+                if ret:
+                    scene_timestamps.append((frame, scene['mid_timestamp']))
+            
+            cap.release()
+            frames = scene_timestamps
+        
+        print(f"\n🔍 Step 3/5: Running OCR on {len(frames)} scene frames...")
+        ocr_titles = self.ocr_extractor.extract_movie_titles(frames, language=self.language)
         print(f"   Found {len(ocr_titles)} potential titles via OCR")
         
-        print("\n🎤 Step 3/5: Transcribing audio with Whisper...")
-        audio_titles = self.audio_transcriber.extract_movie_titles(video_path)
-        print(f"   Found {len(audio_titles)} potential titles via audio")
+        print("\n🎤 Step 4/5: Transcribing audio for each scene...")
+        if scenes and len(scenes) > 0:
+            print(f"   Transcribing {len(scenes)} scene segments")
+            audio_titles = []
+            
+            for idx, scene in enumerate(scenes):
+                segment_audio = self.audio_transcriber.extract_movie_titles_by_timestamps(
+                    video_path,
+                    [scene['mid_timestamp']],
+                    language=self.language,
+                    window_seconds=scene['duration'] / 2
+                )
+                audio_titles.extend(segment_audio)
+        else:
+            print("   No scenes detected, using OCR timestamps")
+            if ocr_titles:
+                ocr_timestamps = [title['timestamp'] for title in ocr_titles]
+                audio_titles = self.audio_transcriber.extract_movie_titles_by_timestamps(
+                    video_path, 
+                    ocr_timestamps, 
+                    language=self.language,
+                    window_seconds=3.0
+                )
+            else:
+                audio_titles = []
         
-        print("\n✅ Step 4/5: Matching and validating titles...")
+        print(f"\n✅ Step 5/5: Matching and validating titles...")
         matched_titles = self.validator.match_titles(ocr_titles, audio_titles)
         validated_titles = self.validator.validate_and_resolve(
             matched_titles,
             interactive=interactive
         )
         
-        print(f"\n📝 Step 5/5: Generating markdown output...")
+        print(f"\n📝 Step 6/6: Generating markdown output...")
         markdown_content = self.markdown_generator.generate_movie_list(
             validated_titles,
             oleada_number

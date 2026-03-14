@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 
 from src.movie_processor import MovieProcessor
+from src.audio_only_processor import AudioOnlyProcessor
 
 
 def main():
@@ -107,6 +108,25 @@ Examples:
         help='Skip Quarto website generation'
     )
     
+    parser.add_argument(
+        '--language',
+        choices=['auto', 'en', 'es'],
+        default='auto',
+        help='Language for OCR and transcription (default: auto-detect Spanish/English)'
+    )
+    
+    parser.add_argument(
+        '--no-language-detection',
+        action='store_true',
+        help='Disable automatic language detection (use English only)'
+    )
+    
+    parser.add_argument(
+        '--audio-only',
+        action='store_true',
+        help='Audio-only mode: extract transcription and generate LLM prompt (no OCR)'
+    )
+    
     args = parser.parse_args()
     
     for video_path in args.videos:
@@ -122,14 +142,47 @@ Examples:
     print(f"Frame interval: {args.frame_interval}")
     print(f"Confidence threshold: {args.confidence_threshold * 100}%")
     print(f"Interactive mode: {'No' if args.no_interactive else 'Yes'}")
+    
+    lang_mode = 'English only' if args.no_language_detection else (
+        'Auto-detect (Spanish/English)' if args.language == 'auto' else 
+        ('Spanish' if args.language == 'es' else 'English')
+    )
+    print(f"Language mode: {lang_mode}")
     print("="*70 + "\n")
+    
+    if args.audio_only:
+        print("\n🎤 Running in AUDIO-ONLY mode")
+        print("="*70 + "\n")
+        
+        audio_processor = AudioOnlyProcessor(model_size=args.whisper_model)
+        
+        for idx, video_path in enumerate(args.videos):
+            oleada_num = args.starting_oleada + idx if not args.oleada else args.oleada
+            
+            language = None if args.language == 'auto' else args.language
+            transcription = audio_processor.extract_full_transcription(video_path, language=language)
+            
+            detected_lang = 'es' if any(word in transcription.lower() for word in ['el', 'la', 'los', 'las']) else 'en'
+            
+            output_file = os.path.join(args.output_dir, f'oleada_{oleada_num:02d}_audio.json')
+            audio_processor.save_for_llm_processing(transcription, output_file, language=detected_lang)
+        
+        print("\n" + "="*70)
+        print("🎉 Audio-only processing complete!")
+        print("="*70 + "\n")
+        sys.exit(0)
+    
+    language = None if args.language == 'auto' else args.language
+    auto_detect = not args.no_language_detection and args.language == 'auto'
     
     processor = MovieProcessor(
         frame_interval=args.frame_interval,
         whisper_model=args.whisper_model,
         confidence_threshold=args.confidence_threshold,
         output_dir=args.output_dir,
-        quarto_dir=args.quarto_dir
+        quarto_dir=args.quarto_dir,
+        language=language,
+        auto_detect_language=auto_detect
     )
     
     if len(args.videos) == 1 and args.oleada:

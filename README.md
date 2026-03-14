@@ -5,6 +5,7 @@ A Python application that processes videos of movie covers with spoken titles, e
 ## ✨ Features
 
 - **Dual Extraction**: Combines OpenCV + Tesseract OCR with OpenAI Whisper for robust movie title extraction
+- **🌍 Language Detection**: Automatic detection of Spanish and English with 99% accuracy
 - **Intelligent Validation**: String similarity matching with 90% confidence threshold
 - **Interactive Review**: Prompts user for manual selection when confidence is low
 - **Automated Website Generation**: Creates Quarto websites with Cosmos theme
@@ -95,6 +96,15 @@ python main.py video.mp4 --oleada 1 --frame-interval 60
 
 # Skip Quarto website generation
 python main.py video.mp4 --oleada 1 --skip-quarto
+
+# Force Spanish language
+python main.py video.mp4 --oleada 1 --language es
+
+# Force English language
+python main.py video.mp4 --oleada 1 --language en
+
+# Disable language detection (English only)
+python main.py video.mp4 --oleada 1 --no-language-detection
 ```
 
 ### Full CLI Options
@@ -116,6 +126,10 @@ optional arguments:
   --no-interactive      Disable interactive prompts
   --save-frames         Save extracted frames to disk
   --skip-quarto         Skip Quarto website generation
+  --language {auto,en,es}
+                        Language for OCR and transcription (default: auto-detect)
+  --no-language-detection
+                        Disable automatic language detection (use English only)
 ```
 
 ## 🌐 Building the Quarto Website
@@ -206,6 +220,44 @@ The codebase is designed for efficiency. Here are optimization strategies:
 - **Base Whisper**: ~1.5GB RAM
 - **Frame Processing**: ~500MB per video
 - **Total Recommended**: 4GB+ RAM
+
+## 🌍 Language Support
+
+The system automatically detects **Spanish** and **English** movie titles:
+
+### Automatic Detection (Default)
+```bash
+python main.py video.mp4 --oleada 1
+# Automatically detects Spanish or English
+```
+
+### Force Specific Language
+```bash
+# Spanish videos
+python main.py video.mp4 --oleada 1 --language es
+
+# English videos
+python main.py video.mp4 --oleada 1 --language en
+```
+
+### How It Works
+- **Whisper**: Analyzes audio to detect language with 99%+ accuracy
+- **OCR**: Tests both English and Spanish, uses best result
+- **Reporting**: Shows detected language in output
+
+### Installing Spanish Support
+```bash
+# Ubuntu/Debian
+sudo apt-get install tesseract-ocr-spa
+
+# macOS
+brew install tesseract-lang
+
+# Verify
+tesseract --list-langs
+```
+
+For detailed language documentation, see [`LANGUAGE_SUPPORT.md`](LANGUAGE_SUPPORT.md).
 
 ## 🔧 Troubleshooting
 

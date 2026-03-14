@@ -69,6 +69,12 @@ python main.py video.mp4 --oleada 1 --no-interactive
 
 # Save frames for debugging
 python main.py video.mp4 --oleada 1 --save-frames
+
+# Spanish language videos
+python main.py video.mp4 --oleada 1 --language es
+
+# Auto-detect Spanish/English (default)
+python main.py video.mp4 --oleada 1
 ```
 
 ## Build Website

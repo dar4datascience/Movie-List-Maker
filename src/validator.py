@@ -52,6 +52,7 @@ class MovieValidator:
     def match_titles(self, ocr_titles: List[Dict], audio_titles: List[Dict]) -> List[Dict]:
         """
         Match OCR and audio titles, calculating confidence scores.
+        Uses both text similarity and timestamp proximity.
         
         Args:
             ocr_titles: List of OCR-extracted titles
@@ -72,13 +73,18 @@ class MovieValidator:
                 if idx in used_audio_indices:
                     continue
                 
-                similarity = self.calculate_similarity(
+                text_similarity = self.calculate_similarity(
                     ocr_title['title'],
                     audio_title['title']
                 )
                 
-                if similarity > best_similarity:
-                    best_similarity = similarity
+                time_diff = abs(ocr_title.get('timestamp', 0) - audio_title.get('timestamp', 0))
+                time_proximity = max(0, 1.0 - (time_diff / 10.0))
+                
+                combined_score = (text_similarity * 0.7) + (time_proximity * 0.3)
+                
+                if combined_score > best_similarity:
+                    best_similarity = combined_score
                     best_match = audio_title
                     best_audio_idx = idx
             
@@ -105,13 +111,17 @@ class MovieValidator:
         
         for idx, audio_title in enumerate(audio_titles):
             if idx not in used_audio_indices:
+                audio_conf = audio_title.get('confidence', 0.5)
+                if audio_conf > 1:
+                    audio_conf = audio_conf / 100
+                
                 matched_titles.append({
                     'ocr_title': None,
                     'audio_title': audio_title['title'],
                     'final_title': audio_title['title'],
-                    'confidence': 1.0 - audio_title.get('confidence', 0) / 100,
+                    'confidence': audio_conf,
                     'timestamp': audio_title.get('timestamp', 0),
-                    'needs_review': True
+                    'needs_review': audio_conf < self.confidence_threshold
                 })
         
         matched_titles.sort(key=lambda x: x['timestamp'])

@@ -29,9 +29,25 @@ class MarkdownGenerator:
         Returns:
             Markdown content as string
         """
+        detected_langs = set()
+        for title in titles:
+            if 'language' in title:
+                detected_langs.add(title['language'])
+        
+        lang_info = ""
+        if detected_langs:
+            lang_names = []
+            if 'en' in detected_langs:
+                lang_names.append('English')
+            if 'es' in detected_langs:
+                lang_names.append('Spanish')
+            if lang_names:
+                lang_info = f"**Languages Detected:** {', '.join(lang_names)}\n"
+        
         markdown_lines = [
             f"# Oleada {oleada_number:02d} - Movie List\n",
             f"**Total Movies:** {len(titles)}\n",
+            lang_info,
             "---\n"
         ]
         

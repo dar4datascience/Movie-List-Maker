@@ -1,7 +1,7 @@
 import cv2
 import os
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 import numpy as np
 
 
@@ -87,6 +87,81 @@ class VideoProcessor:
         _, thresh = cv2.threshold(denoised, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         
         return thresh
+    
+    def detect_scene_changes(self, video_path: str, threshold: float = 30.0) -> List[Dict]:
+        """
+        Detect scene changes (when movie covers change) in video.
+        
+        Args:
+            video_path: Path to video file
+            threshold: Threshold for scene change detection (higher = less sensitive)
+            
+        Returns:
+            List of scene segments with start/end times and representative frame
+        """
+        cap = cv2.VideoCapture(video_path)
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        
+        scenes = []
+        prev_frame = None
+        scene_start = 0
+        scene_start_frame_idx = 0
+        frame_idx = 0
+        
+        print(f"   Detecting scene changes (threshold: {threshold})...")
+        
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            
+            if frame_idx % 10 == 0:
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                gray = cv2.resize(gray, (64, 64))
+                
+                if prev_frame is not None:
+                    diff = cv2.absdiff(prev_frame, gray)
+                    mean_diff = np.mean(diff)
+                    
+                    if mean_diff > threshold:
+                        timestamp = frame_idx / fps
+                        scene_duration = timestamp - scene_start
+                        
+                        if scene_duration > 1.0:
+                            mid_frame_idx = (scene_start_frame_idx + frame_idx) // 2
+                            scenes.append({
+                                'start': scene_start,
+                                'end': timestamp,
+                                'duration': scene_duration,
+                                'mid_frame_idx': mid_frame_idx,
+                                'mid_timestamp': mid_frame_idx / fps
+                            })
+                            
+                            scene_start = timestamp
+                            scene_start_frame_idx = frame_idx
+                
+                prev_frame = gray
+            
+            frame_idx += 1
+        
+        if scene_start < (frame_idx / fps):
+            timestamp = frame_idx / fps
+            mid_frame_idx = (scene_start_frame_idx + frame_idx) // 2
+            scenes.append({
+                'start': scene_start,
+                'end': timestamp,
+                'duration': timestamp - scene_start,
+                'mid_frame_idx': mid_frame_idx,
+                'mid_timestamp': mid_frame_idx / fps
+            })
+        
+        cap.release()
+        
+        print(f"   Detected {len(scenes)} scene segments")
+        for idx, scene in enumerate(scenes):
+            print(f"      Scene {idx+1}: {scene['start']:.1f}s - {scene['end']:.1f}s ({scene['duration']:.1f}s)")
+        
+        return scenes
     
     @staticmethod
     def get_video_duration(video_path: str) -> float:
