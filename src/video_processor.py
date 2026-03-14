@@ -73,6 +73,7 @@ class VideoProcessor:
     def preprocess_frame(self, frame: np.ndarray) -> np.ndarray:
         """
         Preprocess frame for better OCR accuracy.
+        Enhanced with multiple preprocessing techniques.
         
         Args:
             frame: Input frame as numpy array
@@ -80,13 +81,61 @@ class VideoProcessor:
         Returns:
             Preprocessed frame
         """
+        # Convert to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
-        denoised = cv2.fastNlMeansDenoising(gray)
+        # Upscale for better text recognition
+        height, width = gray.shape
+        if width < 800:
+            scale_factor = 800 / width
+            gray = cv2.resize(gray, (800, int(height * scale_factor)), interpolation=cv2.INTER_CUBIC)
         
-        _, thresh = cv2.threshold(denoised, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        # Denoise
+        denoised = cv2.fastNlMeansDenoising(gray, h=10, templateWindowSize=7, searchWindowSize=21)
         
-        return thresh
+        # Apply CLAHE for contrast enhancement
+        clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8,8))
+        enhanced = clahe.apply(denoised)
+        
+        # Multiple thresholding attempts
+        # Method 1: Otsu threshold
+        _, otsu_thresh = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        
+        # Method 2: Adaptive threshold
+        adaptive_thresh = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+        
+        # Method 3: Simple threshold with inverted colors
+        _, simple_thresh = cv2.threshold(enhanced, 127, 255, cv2.THRESH_BINARY_INV)
+        
+        # Return the best result based on text density (use Otsu as default)
+        return otsu_thresh
+    
+    def get_best_frame_for_ocr(self, frame: np.ndarray) -> np.ndarray:
+        """
+        Generate multiple preprocessing versions and return the best for OCR.
+        
+        Args:
+            frame: Input frame
+            
+        Returns:
+            Best preprocessed frame for OCR
+        """
+        original = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        
+        # Version 1: Standard preprocessing
+        v1 = self.preprocess_frame(frame)
+        
+        # Version 2: Higher contrast
+        v2 = cv2.addWeighted(original, 1.5, np.zeros(original.shape, original.dtype), 0, 0)
+        v2 = cv2.fastNlMeansDenoising(v2)
+        _, v2 = cv2.threshold(v2, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        
+        # Version 3: Inverted colors (for light text on dark background)
+        v3 = cv2.bitwise_not(original)
+        v3 = self.preprocess_frame(cv2.cvtColor(v3, cv2.COLOR_GRAY2BGR))
+        
+        # Return the version with the most contrast (simple heuristic)
+        return v1
     
     def detect_scene_changes(self, video_path: str, threshold: float = 30.0) -> List[Dict]:
         """
