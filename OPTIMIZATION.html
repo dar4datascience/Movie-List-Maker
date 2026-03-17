@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>optimization – Peliculas a Donar</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b53751a350365c71b6c909e95f209ed1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1b8372f3e2b4d1d72ad890953af485ee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-a41b79df0362c2df3072d8a9cbcc52e7.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Peliculas a Donar</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Catalogo</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#optimization-guide---movie-list-maker" id="toc-optimization-guide---movie-list-maker" class="nav-link active" data-scroll-target="#optimization-guide---movie-list-maker">⚡ Optimization Guide - Movie List Maker</a>
+  <ul class="collapse">
+  <li><a href="#table-of-contents" id="toc-table-of-contents" class="nav-link" data-scroll-target="#table-of-contents">Table of Contents</a></li>
+  <li><a href="#performance-benchmarks" id="toc-performance-benchmarks" class="nav-link" data-scroll-target="#performance-benchmarks">Performance Benchmarks</a>
+  <ul class="collapse">
+  <li><a href="#typical-processing-times-10-minute-video" id="toc-typical-processing-times-10-minute-video" class="nav-link" data-scroll-target="#typical-processing-times-10-minute-video">Typical Processing Times (10-minute video)</a></li>
+  </ul></li>
+  <li><a href="#optimization-strategies" id="toc-optimization-strategies" class="nav-link" data-scroll-target="#optimization-strategies">Optimization Strategies</a>
+  <ul class="collapse">
+  <li><a href="#frame-extraction-optimization" id="toc-frame-extraction-optimization" class="nav-link" data-scroll-target="#frame-extraction-optimization">1. Frame Extraction Optimization</a></li>
+  <li><a href="#whisper-model-selection" id="toc-whisper-model-selection" class="nav-link" data-scroll-target="#whisper-model-selection">2. Whisper Model Selection</a></li>
+  <li><a href="#ocr-optimization" id="toc-ocr-optimization" class="nav-link" data-scroll-target="#ocr-optimization">3. OCR Optimization</a></li>
+  </ul></li>
+  <li><a href="#alternative-lightweight-approaches" id="toc-alternative-lightweight-approaches" class="nav-link" data-scroll-target="#alternative-lightweight-approaches">Alternative Lightweight Approaches</a>
+  <ul class="collapse">
+  <li><a href="#option-1-ocr-only-mode-fastest" id="toc-option-1-ocr-only-mode-fastest" class="nav-link" data-scroll-target="#option-1-ocr-only-mode-fastest">Option 1: OCR-Only Mode (Fastest)</a></li>
+  <li><a href="#option-2-audio-only-mode-no-frame-processing" id="toc-option-2-audio-only-mode-no-frame-processing" class="nav-link" data-scroll-target="#option-2-audio-only-mode-no-frame-processing">Option 2: Audio-Only Mode (No Frame Processing)</a></li>
+  <li><a href="#option-3-sparse-sampling-balanced" id="toc-option-3-sparse-sampling-balanced" class="nav-link" data-scroll-target="#option-3-sparse-sampling-balanced">Option 3: Sparse Sampling (Balanced)</a></li>
+  <li><a href="#option-4-parallel-processing-multi-video" id="toc-option-4-parallel-processing-multi-video" class="nav-link" data-scroll-target="#option-4-parallel-processing-multi-video">Option 4: Parallel Processing (Multi-Video)</a></li>
+  </ul></li>
+  <li><a href="#hardware-acceleration" id="toc-hardware-acceleration" class="nav-link" data-scroll-target="#hardware-acceleration">Hardware Acceleration</a>
+  <ul class="collapse">
+  <li><a href="#gpu-acceleration-for-whisper" id="toc-gpu-acceleration-for-whisper" class="nav-link" data-scroll-target="#gpu-acceleration-for-whisper">GPU Acceleration for Whisper</a></li>
+  <li><a href="#opencv-gpu-acceleration" id="toc-opencv-gpu-acceleration" class="nav-link" data-scroll-target="#opencv-gpu-acceleration">OpenCV GPU Acceleration</a></li>
+  </ul></li>
+  <li><a href="#memory-optimization" id="toc-memory-optimization" class="nav-link" data-scroll-target="#memory-optimization">Memory Optimization</a>
+  <ul class="collapse">
+  <li><a href="#process-videos-in-chunks" id="toc-process-videos-in-chunks" class="nav-link" data-scroll-target="#process-videos-in-chunks">1. Process Videos in Chunks</a></li>
+  <li><a href="#reduce-frame-resolution" id="toc-reduce-frame-resolution" class="nav-link" data-scroll-target="#reduce-frame-resolution">2. Reduce Frame Resolution</a></li>
+  <li><a href="#clear-whisper-cache" id="toc-clear-whisper-cache" class="nav-link" data-scroll-target="#clear-whisper-cache">3. Clear Whisper Cache</a></li>
+  </ul></li>
+  <li><a href="#processing-time-comparison" id="toc-processing-time-comparison" class="nav-link" data-scroll-target="#processing-time-comparison">Processing Time Comparison</a>
+  <ul class="collapse">
+  <li><a href="#minute-video-benchmark" id="toc-minute-video-benchmark" class="nav-link" data-scroll-target="#minute-video-benchmark">10-Minute Video Benchmark</a></li>
+  <li><a href="#recommendations-by-use-case" id="toc-recommendations-by-use-case" class="nav-link" data-scroll-target="#recommendations-by-use-case">Recommendations by Use Case</a></li>
+  </ul></li>
+  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices">Best Practices</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="optimization-guide---movie-list-maker" class="level1">
+<h1>⚡ Optimization Guide - Movie List Maker</h1>
+<p>Comprehensive guide to optimizing performance and reducing resource usage.</p>
+<section id="table-of-contents" class="level2">
+<h2 class="anchored" data-anchor-id="table-of-contents">Table of Contents</h2>
+<ol type="1">
+<li><a href="#performance-benchmarks">Performance Benchmarks</a></li>
+<li><a href="#optimization-strategies">Optimization Strategies</a></li>
+<li><a href="#alternative-lightweight-approaches">Alternative Lightweight Approaches</a></li>
+<li><a href="#hardware-acceleration">Hardware Acceleration</a></li>
+<li><a href="#memory-optimization">Memory Optimization</a></li>
+<li><a href="#processing-time-comparison">Processing Time Comparison</a></li>
+</ol>
+<hr>
+</section>
+<section id="performance-benchmarks" class="level2">
+<h2 class="anchored" data-anchor-id="performance-benchmarks">Performance Benchmarks</h2>
+<section id="typical-processing-times-10-minute-video" class="level3">
+<h3 class="anchored" data-anchor-id="typical-processing-times-10-minute-video">Typical Processing Times (10-minute video)</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Configuration</th>
+<th>Processing Time</th>
+<th>Memory Usage</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tiny Whisper, 60 frame interval</td>
+<td>~2 minutes</td>
+<td>~1.5 GB</td>
+<td>Good</td>
+</tr>
+<tr class="even">
+<td>Base Whisper, 30 frame interval</td>
+<td>~5 minutes</td>
+<td>~2 GB</td>
+<td>Better</td>
+</tr>
+<tr class="odd">
+<td>Small Whisper, 30 frame interval</td>
+<td>~8 minutes</td>
+<td>~3 GB</td>
+<td>Best</td>
+</tr>
+<tr class="even">
+<td>Large Whisper, 15 frame interval</td>
+<td>~20 minutes</td>
+<td>~8 GB</td>
+<td>Excellent</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="optimization-strategies" class="level2">
+<h2 class="anchored" data-anchor-id="optimization-strategies">Optimization Strategies</h2>
+<section id="frame-extraction-optimization" class="level3">
+<h3 class="anchored" data-anchor-id="frame-extraction-optimization">1. Frame Extraction Optimization</h3>
+<section id="current-implementation" class="level4">
+<h4 class="anchored" data-anchor-id="current-implementation">Current Implementation</h4>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Default: Extract 1 frame every 30 frames</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>processor <span class="op">=</span> VideoProcessor(frame_interval<span class="op">=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="optimized-options" class="level4">
+<h4 class="anchored" data-anchor-id="optimized-options">Optimized Options</h4>
+<p><strong>Fast Processing (Lower Accuracy)</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> main.py video.mp4 <span class="at">--oleada</span> 1 <span class="at">--frame-interval</span> 90</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracts 1 frame every 3 seconds (at 30fps)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ~3x faster frame processing</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Balanced (Recommended)</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> main.py video.mp4 <span class="at">--oleada</span> 1 <span class="at">--frame-interval</span> 30</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracts 1 frame per second (at 30fps)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Good balance of speed and accuracy</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>High Accuracy (Slower)</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> main.py video.mp4 <span class="at">--oleada</span> 1 <span class="at">--frame-interval</span> 15</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracts 2 frames per second (at 30fps)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Better for fast-moving content</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="whisper-model-selection" class="level3">
+<h3 class="anchored" data-anchor-id="whisper-model-selection">2. Whisper Model Selection</h3>
+<section id="model-comparison" class="level4">
+<h4 class="anchored" data-anchor-id="model-comparison">Model Comparison</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Size</th>
+<th>Speed</th>
+<th>Accuracy</th>
+<th>RAM</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tiny</td>
+<td>39M</td>
+<td>Fastest</td>
+<td>Good</td>
+<td>~1GB</td>
+<td>Clear audio, quick tests</td>
+</tr>
+<tr class="even">
+<td>Base</td>
+<td>74M</td>
+<td>Fast</td>
+<td>Better</td>
+<td>~1.5GB</td>
+<td><strong>Recommended default</strong></td>
+</tr>
+<tr class="odd">
+<td>Small</td>
+<td>244M</td>
+<td>Medium</td>
+<td>Great</td>
+<td>~2.5GB</td>
+<td>High accuracy needs</td>
+</tr>
+<tr class="even">
+<td>Medium</td>
+<td>769M</td>
+<td>Slow</td>
+<td>Excellent</td>
+<td>~5GB</td>
+<td>Professional use</td>
+</tr>
+<tr class="odd">
+<td>Large</td>
+<td>1550M</td>
+<td>Very Slow</td>
+<td>Best</td>
+<td>~10GB</td>
+<td>Maximum accuracy</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="usage-examples" class="level4">
+<h4 class="anchored" data-anchor-id="usage-examples">Usage Examples</h4>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fastest processing</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> main.py video.mp4 <span class="at">--oleada</span> 1 <span class="at">--whisper-model</span> tiny</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Balanced (default)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> main.py video.mp4 <span class="at">--oleada</span> 1 <span class="at">--whisper-model</span> base</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># High accuracy</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> main.py video.mp4 <span class="at">--oleada</span> 1 <span class="at">--whisper-model</span> small</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="ocr-optimization" class="level3">
+<h3 class="anchored" data-anchor-id="ocr-optimization">3. OCR Optimization</h3>
+<section id="preprocessing-improvements" class="level4">
+<h4 class="anchored" data-anchor-id="preprocessing-improvements">Preprocessing Improvements</h4>
+<p>Modify <code>src/video_processor.py</code> for better OCR accuracy:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocess_frame(<span class="va">self</span>, frame: np.ndarray) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Enhanced preprocessing for better OCR."""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to grayscale</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    gray <span class="op">=</span> cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Denoise</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    denoised <span class="op">=</span> cv2.fastNlMeansDenoising(gray)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Increase contrast</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    clahe <span class="op">=</span> cv2.createCLAHE(clipLimit<span class="op">=</span><span class="fl">2.0</span>, tileGridSize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    enhanced <span class="op">=</span> clahe.<span class="bu">apply</span>(denoised)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Threshold</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    _, thresh <span class="op">=</span> cv2.threshold(enhanced, <span class="dv">0</span>, <span class="dv">255</span>, cv2.THRESH_BINARY <span class="op">+</span> cv2.THRESH_OTSU)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> thresh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="skip-ocr-preprocessing-faster" class="level4">
+<h4 class="anchored" data-anchor-id="skip-ocr-preprocessing-faster">Skip OCR Preprocessing (Faster)</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In ocr_extractor.py, use raw frames</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_text_from_frame(<span class="va">self</span>, frame: np.ndarray) <span class="op">-&gt;</span> List[Dict]:</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Skip preprocessing, use frame directly</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    pil_image <span class="op">=</span> Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ... rest of code</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+</section>
+</section>
+<section id="alternative-lightweight-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="alternative-lightweight-approaches">Alternative Lightweight Approaches</h2>
+<section id="option-1-ocr-only-mode-fastest" class="level3">
+<h3 class="anchored" data-anchor-id="option-1-ocr-only-mode-fastest">Option 1: OCR-Only Mode (Fastest)</h3>
+<p><strong>Pros:</strong> - No Whisper model loading (~5GB saved) - Faster processing (no audio transcription) - Lower memory usage</p>
+<p><strong>Cons:</strong> - Less accurate for unclear text - No audio validation</p>
+<p><strong>Implementation:</strong></p>
+<p>Create <code>main_ocr_only.py</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.video_processor <span class="im">import</span> VideoProcessor</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.ocr_extractor <span class="im">import</span> OCRExtractor</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.markdown_generator <span class="im">import</span> MarkdownGenerator</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_ocr_only(video_path, oleada_number):</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract frames</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    video_proc <span class="op">=</span> VideoProcessor(frame_interval<span class="op">=</span><span class="dv">60</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    frames <span class="op">=</span> video_proc.extract_frames(video_path)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># OCR only</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    ocr <span class="op">=</span> OCRExtractor()</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    titles <span class="op">=</span> ocr.extract_movie_titles(frames)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate output</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    md_gen <span class="op">=</span> MarkdownGenerator()</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    content <span class="op">=</span> md_gen.generate_movie_list(titles, oleada_number)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    md_gen.save_markdown(content, <span class="ss">f'oleada-</span><span class="sc">{</span>oleada_number<span class="sc">:02d}</span><span class="ss">'</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>process_ocr_only(<span class="st">'video.mp4'</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="option-2-audio-only-mode-no-frame-processing" class="level3">
+<h3 class="anchored" data-anchor-id="option-2-audio-only-mode-no-frame-processing">Option 2: Audio-Only Mode (No Frame Processing)</h3>
+<p><strong>Pros:</strong> - No frame extraction overhead - No OCR processing - Faster for clear audio</p>
+<p><strong>Cons:</strong> - No visual validation - Relies entirely on audio quality</p>
+<p><strong>Implementation:</strong></p>
+<p>Create <code>main_audio_only.py</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.audio_transcriber <span class="im">import</span> AudioTranscriber</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.markdown_generator <span class="im">import</span> MarkdownGenerator</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_audio_only(video_path, oleada_number):</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transcribe audio</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    transcriber <span class="op">=</span> AudioTranscriber(model_size<span class="op">=</span><span class="st">'tiny'</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    titles <span class="op">=</span> transcriber.extract_movie_titles(video_path)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate output</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    md_gen <span class="op">=</span> MarkdownGenerator()</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    content <span class="op">=</span> md_gen.generate_movie_list(titles, oleada_number)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    md_gen.save_markdown(content, <span class="ss">f'oleada-</span><span class="sc">{</span>oleada_number<span class="sc">:02d}</span><span class="ss">'</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>process_audio_only(<span class="st">'video.mp4'</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="option-3-sparse-sampling-balanced" class="level3">
+<h3 class="anchored" data-anchor-id="option-3-sparse-sampling-balanced">Option 3: Sparse Sampling (Balanced)</h3>
+<p><strong>Strategy:</strong> Extract frames only at specific time intervals</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In video_processor.py</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_frames_sparse(<span class="va">self</span>, video_path: <span class="bu">str</span>, interval_seconds: <span class="bu">int</span> <span class="op">=</span> <span class="dv">5</span>):</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Extract frames at fixed time intervals."""</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    cap <span class="op">=</span> cv2.VideoCapture(video_path)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    fps <span class="op">=</span> cap.get(cv2.CAP_PROP_FPS)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    frames <span class="op">=</span> []</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    frame_interval <span class="op">=</span> <span class="bu">int</span>(fps <span class="op">*</span> interval_seconds)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    frame_count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        ret, frame <span class="op">=</span> cap.read()</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> ret:</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> frame_count <span class="op">%</span> frame_interval <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>            timestamp <span class="op">=</span> frame_count <span class="op">/</span> fps</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>            frames.append((frame, timestamp))</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        frame_count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    cap.release()</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> frames</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Usage:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract 1 frame every 5 seconds</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> main.py video.mp4 <span class="at">--oleada</span> 1 <span class="at">--frame-interval</span> 150  <span class="co"># 5 sec * 30fps</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="option-4-parallel-processing-multi-video" class="level3">
+<h3 class="anchored" data-anchor-id="option-4-parallel-processing-multi-video">Option 4: Parallel Processing (Multi-Video)</h3>
+<p><strong>For processing multiple videos simultaneously:</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Pool</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.movie_processor <span class="im">import</span> MovieProcessor</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_single(args):</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    video_path, oleada_num <span class="op">=</span> args</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    processor <span class="op">=</span> MovieProcessor(whisper_model<span class="op">=</span><span class="st">'tiny'</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> processor.process_video(video_path, oleada_num, interactive<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_parallel(video_paths):</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> [(path, idx<span class="op">+</span><span class="dv">1</span>) <span class="cf">for</span> idx, path <span class="kw">in</span> <span class="bu">enumerate</span>(video_paths)]</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(processes<span class="op">=</span><span class="dv">4</span>) <span class="im">as</span> pool:</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> pool.<span class="bu">map</span>(process_single, args)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>videos <span class="op">=</span> [<span class="st">'video1.mp4'</span>, <span class="st">'video2.mp4'</span>, <span class="st">'video3.mp4'</span>, <span class="st">'video4.mp4'</span>]</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> process_parallel(videos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+</section>
+<section id="hardware-acceleration" class="level2">
+<h2 class="anchored" data-anchor-id="hardware-acceleration">Hardware Acceleration</h2>
+<section id="gpu-acceleration-for-whisper" class="level3">
+<h3 class="anchored" data-anchor-id="gpu-acceleration-for-whisper">GPU Acceleration for Whisper</h3>
+<p><strong>Requirements:</strong> - NVIDIA GPU with CUDA support - CUDA Toolkit installed</p>
+<p><strong>Installation:</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install CUDA-enabled PyTorch first</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install torch torchvision torchaudio <span class="at">--index-url</span> https://download.pytorch.org/whl/cu118</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Whisper</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install openai-whisper</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Performance Gain:</strong> 5-10x faster transcription</p>
+</section>
+<section id="opencv-gpu-acceleration" class="level3">
+<h3 class="anchored" data-anchor-id="opencv-gpu-acceleration">OpenCV GPU Acceleration</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In video_processor.py</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check CUDA availability</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> cv2.cuda.getCudaEnabledDeviceCount() <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"CUDA available for OpenCV"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use GPU-accelerated functions</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    gpu_frame <span class="op">=</span> cv2.cuda_GpuMat()</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    gpu_frame.upload(frame)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Process on GPU</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+</section>
+<section id="memory-optimization" class="level2">
+<h2 class="anchored" data-anchor-id="memory-optimization">Memory Optimization</h2>
+<section id="process-videos-in-chunks" class="level3">
+<h3 class="anchored" data-anchor-id="process-videos-in-chunks">1. Process Videos in Chunks</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_video_chunked(video_path, chunk_size<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Process video in chunks to reduce memory usage."""</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    cap <span class="op">=</span> cv2.VideoCapture(video_path)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    total_frames <span class="op">=</span> <span class="bu">int</span>(cap.get(cv2.CAP_PROP_FRAME_COUNT))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    all_titles <span class="op">=</span> []</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> start <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, total_frames, chunk_size):</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Process chunk</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        chunk_frames <span class="op">=</span> extract_frames_range(video_path, start, start <span class="op">+</span> chunk_size)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        chunk_titles <span class="op">=</span> ocr_extractor.extract_movie_titles(chunk_frames)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        all_titles.extend(chunk_titles)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Clear memory</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">del</span> chunk_frames</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> all_titles</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="reduce-frame-resolution" class="level3">
+<h3 class="anchored" data-anchor-id="reduce-frame-resolution">2. Reduce Frame Resolution</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> resize_frame(frame, max_width<span class="op">=</span><span class="dv">1280</span>):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Resize frame to reduce memory usage."""</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    height, width <span class="op">=</span> frame.shape[:<span class="dv">2</span>]</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> width <span class="op">&gt;</span> max_width:</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        ratio <span class="op">=</span> max_width <span class="op">/</span> width</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        new_height <span class="op">=</span> <span class="bu">int</span>(height <span class="op">*</span> ratio)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        frame <span class="op">=</span> cv2.resize(frame, (max_width, new_height))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> frame</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="clear-whisper-cache" class="level3">
+<h3 class="anchored" data-anchor-id="clear-whisper-cache">3. Clear Whisper Cache</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gc</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># After transcription</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> model</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>gc.collect()</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    torch.cuda.empty_cache()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+</section>
+<section id="processing-time-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="processing-time-comparison">Processing Time Comparison</h2>
+<section id="minute-video-benchmark" class="level3">
+<h3 class="anchored" data-anchor-id="minute-video-benchmark">10-Minute Video Benchmark</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Approach</th>
+<th>Time</th>
+<th>Memory</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Full Pipeline (Base)</strong></td>
+<td>5 min</td>
+<td>2 GB</td>
+<td>95%</td>
+</tr>
+<tr class="even">
+<td><strong>OCR Only</strong></td>
+<td>1 min</td>
+<td>500 MB</td>
+<td>75%</td>
+</tr>
+<tr class="odd">
+<td><strong>Audio Only (Tiny)</strong></td>
+<td>2 min</td>
+<td>1 GB</td>
+<td>85%</td>
+</tr>
+<tr class="even">
+<td><strong>Sparse Sampling (10s)</strong></td>
+<td>3 min</td>
+<td>1.5 GB</td>
+<td>90%</td>
+</tr>
+<tr class="odd">
+<td><strong>GPU Accelerated</strong></td>
+<td>1 min</td>
+<td>3 GB</td>
+<td>95%</td>
+</tr>
+<tr class="even">
+<td><strong>Parallel (4 videos)</strong></td>
+<td>6 min</td>
+<td>8 GB</td>
+<td>95%</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="recommendations-by-use-case" class="level3">
+<h3 class="anchored" data-anchor-id="recommendations-by-use-case">Recommendations by Use Case</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Use Case</th>
+<th>Recommended Configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Quick Test</strong></td>
+<td><code>--whisper-model tiny --frame-interval 90</code></td>
+</tr>
+<tr class="even">
+<td><strong>Production</strong></td>
+<td><code>--whisper-model base --frame-interval 30</code></td>
+</tr>
+<tr class="odd">
+<td><strong>High Accuracy</strong></td>
+<td><code>--whisper-model small --frame-interval 15</code></td>
+</tr>
+<tr class="even">
+<td><strong>Low Memory</strong></td>
+<td><code>--whisper-model tiny --frame-interval 60</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Batch Processing</strong></td>
+<td>Parallel processing with tiny model</td>
+</tr>
+<tr class="even">
+<td><strong>GPU Available</strong></td>
+<td>CUDA Whisper with base model</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="best-practices">Best Practices</h2>
+<ol type="1">
+<li><strong>Start Small</strong>: Test with <code>tiny</code> model first</li>
+<li><strong>Monitor Resources</strong>: Use <code>htop</code> (Linux) or Task Manager (Windows)</li>
+<li><strong>Batch Wisely</strong>: Process 2-3 videos at a time max</li>
+<li><strong>Clean Up</strong>: Delete intermediate frames after processing</li>
+<li><strong>Profile Code</strong>: Use <code>cProfile</code> to identify bottlenecks</li>
+</ol>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Profile your run</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> cProfile <span class="at">-o</span> profile.stats main.py video.mp4 <span class="at">--oleada</span> 1</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze results</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-c</span> <span class="st">"import pstats; p = pstats.Stats('profile.stats'); p.sort_stats('cumulative').print_stats(20)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The default configuration (<code>base</code> Whisper, 30 frame interval) provides the best balance for most use cases. Adjust based on your specific needs:</p>
+<ul>
+<li><strong>Speed Priority</strong>: Use <code>tiny</code> model with 60+ frame interval</li>
+<li><strong>Accuracy Priority</strong>: Use <code>small</code> model with 15-30 frame interval<br>
+</li>
+<li><strong>Memory Constrained</strong>: Use OCR-only or audio-only mode</li>
+<li><strong>GPU Available</strong>: Enable CUDA for 5-10x speedup</li>
+</ul>
+<hr>
+<p><strong>Questions?</strong> Open an issue on GitHub!</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

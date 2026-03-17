@@ -1,0 +1,457 @@
+[
+  {
+    "objectID": "LANGUAGE_SUPPORT.html",
+    "href": "LANGUAGE_SUPPORT.html",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "Automatic language detection for Spanish and English movie titles.\n\n\n\n\nThe system automatically detects whether your video contains: - Spanish (español) movie titles - English movie titles - Mixed Spanish and English content\nBoth OCR and Whisper transcription adapt to the detected language for optimal accuracy.\n\n\n\n\n\n\n\nAnalyzes first 30 seconds of audio\nDetects language with confidence scores\nSupports 99+ languages but optimized for Spanish/English\nFalls back to English if other language detected\n\n\n\n\n\nTests each frame with both English and Spanish models\nCompares confidence scores\nSelects language with higher accuracy\nTracks primary language across all frames\n\n\n\n\n\nShows detected language in console output\nIncludes language metadata in results\nReports language mix in markdown output\n\n\n\n\n\n\n\n# Automatically detects Spanish or English\npython main.py video.mp4 --oleada 1\n\n\n\n# Force English only\npython main.py video.mp4 --oleada 1 --language en\n\n# Force Spanish only\npython main.py video.mp4 --oleada 1 --language es\n\n\n\n# Use English only, no detection\npython main.py video.mp4 --oleada 1 --no-language-detection\n\n\n\n\n\n\n🔍 Detecting language...\n   Detected: Spanish (es) - Confidence: 94.2%\n\n🎤 Transcribing audio in Spanish: video.mp4\n   Transcription complete. Language: es\n\n🔍 Step 2/5: Running OCR on 30 frames...\n   Primary OCR language detected: Spanish (spa)\n   Found 5 potential titles via OCR\n\n\n\n# Oleada 01 - Movie List\n\n**Total Movies:** 5\n**Languages Detected:** Spanish\n\n---\n\n1. **El Padrino** (Confidence: 95%, Time: 00:15)\n2. **Inception** (Confidence: 92%, Time: 01:23)\n3. **Interestelar** (Confidence: 88%, Time: 02:45)\n\n\n\n\n\n\n\nCode\nLanguage\nTesseract\nWhisper\n\n\n\n\nen\nEnglish\n✅\n✅\n\n\nes\nSpanish\n✅\n✅\n\n\neng\nEnglish (OCR)\n✅\n-\n\n\nspa\nSpanish (OCR)\n✅\n-\n\n\n\n\n\n\n\n\nUbuntu/Debian:\nsudo apt-get install tesseract-ocr-spa\nmacOS:\nbrew install tesseract-lang\nWindows: Spanish data is included in the standard Tesseract installer.\n\n\n\n# Check available languages\ntesseract --list-langs\n\n# Should show:\n# List of available languages (3):\n# eng\n# osd\n# spa\n\n\n\n\n\n\n\nBetter OCR: Spanish-specific character recognition (ñ, á, é, í, ó, ú, ü)\nBetter Transcription: Spanish phonetics and pronunciation\nBetter Validation: Spanish-aware string matching\n\n\n\n\n\nDetects predominant language\nUses appropriate models per segment\nHandles code-switching (Spanglish)\n\n\n\n\n\nLanguage detection adds minimal overhead:\n\n\n\nOperation\nTime Added\n\n\n\n\nWhisper detection\n~1-2 seconds\n\n\nOCR per-frame detection\n~0.1 seconds\n\n\nTotal for 10-min video\n~5-10 seconds\n\n\n\n\n\n\n\n\nInstall Tesseract Spanish data:\nsudo apt-get install tesseract-ocr-spa\n\n\n\n\nEnsure Spanish data is installed\nUse --language es to force Spanish\nCheck video quality and text clarity\n\n\n\n\nForce the correct language:\n# Force Spanish\npython main.py video.mp4 --oleada 1 --language es\n\n# Force English\npython main.py video.mp4 --oleada 1 --language en\n\n\n\n\n\n\nfrom src.movie_processor import MovieProcessor\n\n# Auto-detect language\nprocessor = MovieProcessor(\n    whisper_model='base',\n    auto_detect_language=True\n)\n\n# Force Spanish\nprocessor = MovieProcessor(\n    whisper_model='base',\n    language='es',\n    auto_detect_language=False\n)\n\n# Process video\nresult = processor.process_video('video.mp4', oleada_number=1)\nprint(f\"Detected language: {result.get('language')}\")\n\n\n\nfrom src.audio_transcriber import AudioTranscriber\n\ntranscriber = AudioTranscriber(model_size='base')\nlanguage = transcriber.detect_language('video.mp4')\nprint(f\"Detected: {language}\")\n\n\n\n\nWhile optimized for Spanish/English, Whisper supports 99+ languages:\n\nFrench (fr)\nGerman (de)\nItalian (it)\nPortuguese (pt)\nAnd many more…\n\nTo add support for other languages, install the corresponding Tesseract language data and modify the language detection logic.\n\n\n\n\nLet it auto-detect for best results\nForce language only if detection fails\nInstall Spanish data for Spanish content\nCheck console output to verify detection\nReview low-confidence matches in interactive mode\n\n\nQuestions? Open an issue on GitHub!"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#features",
+    "href": "LANGUAGE_SUPPORT.html#features",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "The system automatically detects whether your video contains: - Spanish (español) movie titles - English movie titles - Mixed Spanish and English content\nBoth OCR and Whisper transcription adapt to the detected language for optimal accuracy."
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#how-it-works",
+    "href": "LANGUAGE_SUPPORT.html#how-it-works",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "Analyzes first 30 seconds of audio\nDetects language with confidence scores\nSupports 99+ languages but optimized for Spanish/English\nFalls back to English if other language detected\n\n\n\n\n\nTests each frame with both English and Spanish models\nCompares confidence scores\nSelects language with higher accuracy\nTracks primary language across all frames\n\n\n\n\n\nShows detected language in console output\nIncludes language metadata in results\nReports language mix in markdown output"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#usage",
+    "href": "LANGUAGE_SUPPORT.html#usage",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "# Automatically detects Spanish or English\npython main.py video.mp4 --oleada 1\n\n\n\n# Force English only\npython main.py video.mp4 --oleada 1 --language en\n\n# Force Spanish only\npython main.py video.mp4 --oleada 1 --language es\n\n\n\n# Use English only, no detection\npython main.py video.mp4 --oleada 1 --no-language-detection"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#example-output",
+    "href": "LANGUAGE_SUPPORT.html#example-output",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "🔍 Detecting language...\n   Detected: Spanish (es) - Confidence: 94.2%\n\n🎤 Transcribing audio in Spanish: video.mp4\n   Transcription complete. Language: es\n\n🔍 Step 2/5: Running OCR on 30 frames...\n   Primary OCR language detected: Spanish (spa)\n   Found 5 potential titles via OCR\n\n\n\n# Oleada 01 - Movie List\n\n**Total Movies:** 5\n**Languages Detected:** Spanish\n\n---\n\n1. **El Padrino** (Confidence: 95%, Time: 00:15)\n2. **Inception** (Confidence: 92%, Time: 01:23)\n3. **Interestelar** (Confidence: 88%, Time: 02:45)"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#language-codes",
+    "href": "LANGUAGE_SUPPORT.html#language-codes",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "Code\nLanguage\nTesseract\nWhisper\n\n\n\n\nen\nEnglish\n✅\n✅\n\n\nes\nSpanish\n✅\n✅\n\n\neng\nEnglish (OCR)\n✅\n-\n\n\nspa\nSpanish (OCR)\n✅\n-"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#installing-spanish-language-data",
+    "href": "LANGUAGE_SUPPORT.html#installing-spanish-language-data",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "Ubuntu/Debian:\nsudo apt-get install tesseract-ocr-spa\nmacOS:\nbrew install tesseract-lang\nWindows: Spanish data is included in the standard Tesseract installer.\n\n\n\n# Check available languages\ntesseract --list-langs\n\n# Should show:\n# List of available languages (3):\n# eng\n# osd\n# spa"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#accuracy-improvements",
+    "href": "LANGUAGE_SUPPORT.html#accuracy-improvements",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "Better OCR: Spanish-specific character recognition (ñ, á, é, í, ó, ú, ü)\nBetter Transcription: Spanish phonetics and pronunciation\nBetter Validation: Spanish-aware string matching\n\n\n\n\n\nDetects predominant language\nUses appropriate models per segment\nHandles code-switching (Spanglish)"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#performance-impact",
+    "href": "LANGUAGE_SUPPORT.html#performance-impact",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "Language detection adds minimal overhead:\n\n\n\nOperation\nTime Added\n\n\n\n\nWhisper detection\n~1-2 seconds\n\n\nOCR per-frame detection\n~0.1 seconds\n\n\nTotal for 10-min video\n~5-10 seconds"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#troubleshooting",
+    "href": "LANGUAGE_SUPPORT.html#troubleshooting",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "Install Tesseract Spanish data:\nsudo apt-get install tesseract-ocr-spa\n\n\n\n\nEnsure Spanish data is installed\nUse --language es to force Spanish\nCheck video quality and text clarity\n\n\n\n\nForce the correct language:\n# Force Spanish\npython main.py video.mp4 --oleada 1 --language es\n\n# Force English\npython main.py video.mp4 --oleada 1 --language en"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#advanced-usage",
+    "href": "LANGUAGE_SUPPORT.html#advanced-usage",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "from src.movie_processor import MovieProcessor\n\n# Auto-detect language\nprocessor = MovieProcessor(\n    whisper_model='base',\n    auto_detect_language=True\n)\n\n# Force Spanish\nprocessor = MovieProcessor(\n    whisper_model='base',\n    language='es',\n    auto_detect_language=False\n)\n\n# Process video\nresult = processor.process_video('video.mp4', oleada_number=1)\nprint(f\"Detected language: {result.get('language')}\")\n\n\n\nfrom src.audio_transcriber import AudioTranscriber\n\ntranscriber = AudioTranscriber(model_size='base')\nlanguage = transcriber.detect_language('video.mp4')\nprint(f\"Detected: {language}\")"
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#supported-languages-future",
+    "href": "LANGUAGE_SUPPORT.html#supported-languages-future",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "While optimized for Spanish/English, Whisper supports 99+ languages:\n\nFrench (fr)\nGerman (de)\nItalian (it)\nPortuguese (pt)\nAnd many more…\n\nTo add support for other languages, install the corresponding Tesseract language data and modify the language detection logic."
+  },
+  {
+    "objectID": "LANGUAGE_SUPPORT.html#best-practices",
+    "href": "LANGUAGE_SUPPORT.html#best-practices",
+    "title": "🌍 Language Support - Movie List Maker",
+    "section": "",
+    "text": "Let it auto-detect for best results\nForce language only if detection fails\nInstall Spanish data for Spanish content\nCheck console output to verify detection\nReview low-confidence matches in interactive mode\n\n\nQuestions? Open an issue on GitHub!"
+  },
+  {
+    "objectID": "quarto_site/oleada-01.html",
+    "href": "quarto_site/oleada-01.html",
+    "title": "Oleada 01 - Movie List",
+    "section": "",
+    "text": "Oleada 01 - Movie List\nTotal Movies: 5\n\n\nExorcista 2 el Ereje (Confidence: 95%, Time: 00:02)\npromotion (Confidence: 95%, Time: 00:06)\nTerr累 (Confidence: 95%, Time: 00:10)\nSerpientes en el tren (Confidence: 95%, Time: 00:15)\nElla es un monstruo (Confidence: 95%, Time: 00:19)\n\n\nGenerated by Movie List Maker"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Biblioteca de Películas y Series",
+    "section": "",
+    "text": "Code\nmovieData = FileAttachment(\"unified_movie_list.json\").json()\n\n// Create search input\nviewof searchText = Inputs.search(movieData, {\n  placeholder: \"Buscar títulos...\",\n  columns: [\"title\"]\n})\n\n// Display filtered results in a table\nInputs.table(searchText, {\n  columns: [\"record_number\", \"title\", \"imdbID\"],\n  header: {\n    record_number: \"#\",\n    title: \"Título\",\n    imdbID: \"IMDB ID\"\n  },\n  width: {\n    record_number: 80,\n    title: 600,\n    imdbID: 120\n  },\n  format: {\n    imdbID: id =&gt; id ? htl.html`&lt;a href=\"https://www.imdb.com/title/${id}/\" target=\"_blank\"&gt;🎬 Ver&lt;/a&gt;` : \"\"\n  }\n})"
+  },
+  {
+    "objectID": "index.html#buscar-y-filtrar",
+    "href": "index.html#buscar-y-filtrar",
+    "title": "Biblioteca de Películas y Series",
+    "section": "",
+    "text": "Code\nmovieData = FileAttachment(\"unified_movie_list.json\").json()\n\n// Create search input\nviewof searchText = Inputs.search(movieData, {\n  placeholder: \"Buscar títulos...\",\n  columns: [\"title\"]\n})\n\n// Display filtered results in a table\nInputs.table(searchText, {\n  columns: [\"record_number\", \"title\", \"imdbID\"],\n  header: {\n    record_number: \"#\",\n    title: \"Título\",\n    imdbID: \"IMDB ID\"\n  },\n  width: {\n    record_number: 80,\n    title: 600,\n    imdbID: 120\n  },\n  format: {\n    imdbID: id =&gt; id ? htl.html`&lt;a href=\"https://www.imdb.com/title/${id}/\" target=\"_blank\"&gt;🎬 Ver&lt;/a&gt;` : \"\"\n  }\n})"
+  },
+  {
+    "objectID": "index.html#resumen-de-la-biblioteca",
+    "href": "index.html#resumen-de-la-biblioteca",
+    "title": "Biblioteca de Películas y Series",
+    "section": "Resumen de la Biblioteca",
+    "text": "Resumen de la Biblioteca\n\n\n\n\n\n\n📊 Estadísticas de la Colección\n\n\n\n\nTotal de Títulos: 257\nPelículas y Series: 257\nCon Datos de IMDB: 0"
+  },
+  {
+    "objectID": "index.html#explorar-por-título",
+    "href": "index.html#explorar-por-título",
+    "title": "Biblioteca de Películas y Series",
+    "section": "Explorar por Título",
+    "text": "Explorar por Título\n\n1\n\n\n\n#1\n\n\n120 Latidos por Minuto\n\n\n\n\n\n2\n\n\n\n#2\n\n\n24 - Temporada 3\n\n\n\n\n#3\n\n\n24 - Temporada 4\n\n\n\n\n\nA\n\n\n\n#4\n\n\nA Perfect Murder\n\n\n\n\n#5\n\n\nAhí Viene el Cascarrabias\n\n\n\n\n#6\n\n\nAlien vs. Predator\n\n\n\n\n#7\n\n\nAlien vs. Predator 2\n\n\n\n\n#8\n\n\nAlmas Condenadas\n\n\n\n\n#9\n\n\nAmor a Segunda Vista\n\n\n\n\n#10\n\n\nAmerican Haunting\n\n\n\n\n#11\n\n\nAnomalisa\n\n\n\n\n#12\n\n\nApolo 13\n\n\n\n\n#13\n\n\nArgylle\n\n\n\n\n#14\n\n\nArte Bruto\n\n\n\n\n#15\n\n\nAtrápame si Puedes\n\n\n\n\n#16\n\n\nAvatar\n\n\n\n\n\nB\n\n\n\n#17\n\n\nBestia de las Profundidades\n\n\n\n\n#18\n\n\nBlack Swarm\n\n\n\n\n#19\n\n\nBolt: Un Perro Fuera de Serie\n\n\n\n\n#20\n\n\nBoy and the World\n\n\n\n\n\nC\n\n\n\n#21\n\n\nCats and Dogs\n\n\n\n\n#22\n\n\nCinema Paradiso\n\n\n\n\n#23\n\n\nCinderella Man\n\n\n\n\n#24\n\n\nCiudad Virtual\n\n\n\n\n#25\n\n\nCloverfield\n\n\n\n\n#26\n\n\nCold and Dark\n\n\n\n\n#27\n\n\nColección de Horror (Bloody Mary, Mortuary, Memory, Salvage)\n\n\n\n\n#28\n\n\nCorazón de Dragón\n\n\n\n\n#29\n\n\nCosmic Voyage\n\n\n\n\n#30\n\n\nCowboys y Aliens\n\n\n\n\n#31\n\n\nCSI - Temporada 1\n\n\n\n\n#32\n\n\nCSI - Temporada 5\n\n\n\n\n#33\n\n\nCSI Miami - Primera Temporada\n\n\n\n\n\nD\n\n\n\n#34\n\n\nDanza con Lobos\n\n\n\n\n#35\n\n\nDaria - Toda la Serie\n\n\n\n\n#36\n\n\nDark Ride\n\n\n\n\n#37\n\n\nDay of the Dead\n\n\n\n\n#38\n\n\nDespicable Me\n\n\n\n\n#39\n\n\nDestino Marte\n\n\n\n\n#40\n\n\nDestiny in Space\n\n\n\n\n#41\n\n\nDoctor Who: Remembrance of the Daleks\n\n\n\n\n#42\n\n\nDon’t Say a Word\n\n\n\n\n#43\n\n\nDoom\n\n\n\n\n#44\n\n\nDoomsday\n\n\n\n\n#45\n\n\nDr. Seuss’ The Lorax\n\n\n\n\n#46\n\n\nDrag Me to Hell\n\n\n\n\n#47\n\n\nDrácula: Príncipe de las Tinieblas\n\n\n\n\n#48\n\n\nDuelo de Titanes\n\n\n\n\n#49\n\n\nDungeons and Dragons: Wrath of the Dragon God\n\n\n\n\n#255\n\n\nDragon Quest\n\n\n\n\n\nE\n\n\n\n#50\n\n\nEl Amo de la Oscuridad\n\n\n\n\n#51\n\n\nEl Aprendiz\n\n\n\n\n#52\n\n\nEl Caso Thomas Crown\n\n\n\n\n#53\n\n\nEl Conde Pátula: Volumen 1\n\n\n\n\n#54\n\n\nEl Cuarto Contacto\n\n\n\n\n#55\n\n\nEl Demonio Neón\n\n\n\n\n#56\n\n\nEl Depredador\n\n\n\n\n#57\n\n\nEl Devorador\n\n\n\n\n#58\n\n\nEl Encanto del Águila\n\n\n\n\n#59\n\n\nEl Espía que Sabía Demasiado\n\n\n\n\n#60\n\n\nEl Exorcista 2: El Hereje\n\n\n\n\n#61\n\n\nEl Fantasma de la Ópera en el Royal Albert Hall\n\n\n\n\n#62\n\n\nEl Gran Concierto\n\n\n\n\n#63\n\n\nEl Gran Impostor\n\n\n\n\n#64\n\n\nEl Hijo Perdido\n\n\n\n\n#65\n\n\nEl Laberinto del Terror\n\n\n\n\n#66\n\n\nEl Libro de la Selva\n\n\n\n\n#67\n\n\nEl Último Rey de Escocia\n\n\n\n\n#68\n\n\nEl Último Samurái\n\n\n\n\n#69\n\n\nElevador del Mal\n\n\n\n\n#70\n\n\nElla es un Monstruo\n\n\n\n\n#71\n\n\nEncantada\n\n\n\n\n#72\n\n\nEpic\n\n\n\n\n#73\n\n\nEverything Everywhere All at Once\n\n\n\n\n#74\n\n\nExodus: Gods and Kings\n\n\n\n\n#256\n\n\nEl Amo de la Oscuridad\n\n\n\n\n#257\n\n\nEye of the Beast\n\n\n\n\n\nF\n\n\n\n#75\n\n\nFaces: El Rostro del Mal\n\n\n\n\n#76\n\n\nFacing the Giants\n\n\n\n\n#77\n\n\nFantasía: La Colección\n\n\n\n\n#78\n\n\nFear.com\n\n\n\n\n#79\n\n\nFinal Fantasy VII: Advent Children\n\n\n\n\n#80\n\n\nForrest Gump\n\n\n\n\n#81\n\n\nFriday Night Lights\n\n\n\n\n#82\n\n\nFuerzas de la Naturaleza\n\n\n\n\n\nG\n\n\n\n#83\n\n\nGhost Hound\n\n\n\n\n#84\n\n\nGorehouse Greats Collection\n\n\n\n\n#85\n\n\nGrandes Maravillas Naturales del Mundo\n\n\n\n\n#86\n\n\nGrandes Migraciones\n\n\n\n\n#87\n\n\nGreen Eggs and Ham\n\n\n\n\n#88\n\n\nGritos de Muerte y Libertad\n\n\n\n\n#89\n\n\nGrumpy Cat’s Worst Christmas Ever\n\n\n\n\n\nH\n\n\n\n#90\n\n\nHagen y Yo\n\n\n\n\n#91\n\n\nHalloween Sangriento\n\n\n\n\n#92\n\n\nHarry Potter y el Cáliz de Fuego\n\n\n\n\n#93\n\n\nHarry Potter y el Misterio del Príncipe\n\n\n\n\n#94\n\n\nHarry Potter y el Prisionero de Azkaban\n\n\n\n\n#95\n\n\nHarry Potter y la Cámara Secreta\n\n\n\n\n#96\n\n\nHarry Potter y la Orden del Fénix\n\n\n\n\n#97\n\n\nHarry Potter y la Piedra Filosofal\n\n\n\n\n#98\n\n\nHistoria de un Crimen\n\n\n\n\n#99\n\n\nHistoria de una Vida\n\n\n\n\n#100\n\n\nHolocausto Caníbal\n\n\n\n\n#101\n\n\nHombre de Familia\n\n\n\n\n#102\n\n\nHombre de Fuego\n\n\n\n\n#103\n\n\nHorton y el Mundo de los Quién\n\n\n\n\n#104\n\n\nHubble: Telescopio en el Espacio\n\n\n\n\n\nI\n\n\n\n#105\n\n\nIce Age: Dawn of the Dinosaurs\n\n\n\n\n#106\n\n\nInk Heart\n\n\n\n\n#107\n\n\nInstinct\n\n\n\n\n#108\n\n\nInterestelar\n\n\n\n\n#109\n\n\nIt Follows\n\n\n\n\n\nJ\n\n\n\n#110\n\n\nJustice League: Gods and Monsters\n\n\n\n\n\nK\n\n\n\n#111\n\n\nKung Fu Hustle\n\n\n\n\n\nL\n\n\n\n#112\n\n\nLa Bella y la Bestia\n\n\n\n\n#113\n\n\nLa Bruja de Blair 2\n\n\n\n\n#114\n\n\nLa Dimensión Desconocida - Temporada 2\n\n\n\n\n#115\n\n\nLa Era de Hielo\n\n\n\n\n#116\n\n\nLa Era de Hielo 3\n\n\n\n\n#117\n\n\nLa Era de Hielo: Una Navidad Tamaño Mamut\n\n\n\n\n#118\n\n\nLa Espada en la Piedra\n\n\n\n\n#119\n\n\nLa Guía Máxima: Cocodrilos\n\n\n\n\n#120\n\n\nLa Maldición\n\n\n\n\n#121\n\n\nLa Maldición de la Casa Winchester\n\n\n\n\n#122\n\n\nLa Piel Fría\n\n\n\n\n#123\n\n\nLa Profecía 3\n\n\n\n\n#124\n\n\nLa Tierra y las Tinieblas\n\n\n\n\n#125\n\n\nLa Ventana Secreta\n\n\n\n\n#126\n\n\nLa Zona Muerta\n\n\n\n\n#127\n\n\nLadyhawke\n\n\n\n\n#128\n\n\nLas Mil y Una Noches\n\n\n\n\n#129\n\n\nLegally Blonde\n\n\n\n\n#130\n\n\nLey y Orden: Unidad de Víctimas Especiales - Primera Temporada\n\n\n\n\n#131\n\n\nLíder de la Manada\n\n\n\n\n#132\n\n\nLos Coristas\n\n\n\n\n#133\n\n\nLos Fotógrafos: Adentro del FBI\n\n\n\n\n#134\n\n\nLos Hijos del Diablo\n\n\n\n\n#135\n\n\nLos Planetas\n\n\n\n\n\nM\n\n\n\n#136\n\n\nMar de Sangre\n\n\n\n\n#137\n\n\nMarea Humana\n\n\n\n\n#138\n\n\nMarte\n\n\n\n\n#139\n\n\nMegamente\n\n\n\n\n#140\n\n\nMente Implacable\n\n\n\n\n#141\n\n\nMessage in a Bottle\n\n\n\n\n#142\n\n\nMetrópolis en Anime\n\n\n\n\n#143\n\n\nMichael Jackson: Number Ones\n\n\n\n\n#144\n\n\nMicrocosmos\n\n\n\n\n#145\n\n\nMidsommar\n\n\n\n\n#146\n\n\nMimic: Sentinela\n\n\n\n\n#147\n\n\nMini Espías\n\n\n\n\n#148\n\n\nMinispías 2\n\n\n\n\n#149\n\n\nMinority Report: Sentencia Previa\n\n\n\n\n#150\n\n\nMinotauro\n\n\n\n\n#151\n\n\nMirrors\n\n\n\n\n#152\n\n\nMiss Congeniality\n\n\n\n\n#153\n\n\nMiss Peregrine y los Niños Peculiares\n\n\n\n\n#154\n\n\nMonsoon\n\n\n\n\n#155\n\n\nMonstruos del Mar\n\n\n\n\n#156\n\n\nMoulin Rouge\n\n\n\n\n#157\n\n\nMucha Lucha - Toda la Serie\n\n\n\n\n#158\n\n\nMujeres Asesinas - Primera Temporada\n\n\n\n\n#159\n\n\nMujeres Asesinas - Segunda Temporada\n\n\n\n\n\nN\n\n\n\n#160\n\n\nNunca Estamos Solos\n\n\n\n\n\nO\n\n\n\n#161\n\n\nOpen Windows: Persecución Virtual\n\n\n\n\n#162\n\n\nOrigen: Espíritus del Pasado\n\n\n\n\n\nP\n\n\n\n#163\n\n\nPassengers\n\n\n\n\n#164\n\n\nPatient Zero\n\n\n\n\n#165\n\n\nPatrick\n\n\n\n\n#166\n\n\nPequeña Gran Vida\n\n\n\n\n#167\n\n\nPerdidos\n\n\n\n\n#168\n\n\nPerros y Gatos 2\n\n\n\n\n#169\n\n\nPesadilla en el Infierno\n\n\n\n\n#170\n\n\nPesadilla Jurásica\n\n\n\n\n#171\n\n\nPhone Booth\n\n\n\n\n#172\n\n\nPinky and the Brain\n\n\n\n\n#173\n\n\nPinky, Elvira y Cerebro\n\n\n\n\n#174\n\n\nPinocho\n\n\n\n\n#175\n\n\nPirañas Mutantes\n\n\n\n\n#176\n\n\nPollitos en Fuga\n\n\n\n\n#177\n\n\nPrey\n\n\n\n\n#178\n\n\nProyecto Espacial\n\n\n\n\n\nQ\n\n\n\n#179\n\n\nQuantum Leap - Quinta Temporada\n\n\n\n\n\nR\n\n\n\n#180\n\n\nReign of Fire\n\n\n\n\n#181\n\n\nResident Evil: El Huésped Maldito\n\n\n\n\n#182\n\n\nResident Evil: La Venganza\n\n\n\n\n#183\n\n\nReturn of the Thundering Herd\n\n\n\n\n#184\n\n\nRiddick\n\n\n\n\n#185\n\n\nRito Satánico\n\n\n\n\n#186\n\n\nRiver Wild\n\n\n\n\n#187\n\n\nRudy\n\n\n\n\n\nS\n\n\n\n#188\n\n\nSalt\n\n\n\n\n#189\n\n\nSeis Grados que Podrían Cambiar el Mundo\n\n\n\n\n#190\n\n\nSerenity\n\n\n\n\n#191\n\n\nSerpientes en el Tren\n\n\n\n\n#192\n\n\nSin Salida\n\n\n\n\n#193\n\n\nSnowmageddon\n\n\n\n\n#194\n\n\nSomos Marshall\n\n\n\n\n#195\n\n\nSpace Buddies\n\n\n\n\n#196\n\n\nSpace Odyssey\n\n\n\n\n#197\n\n\nSphere\n\n\n\n\n#198\n\n\nSwamp Devil\n\n\n\n\n\nT\n\n\n\n#199\n\n\nTake the Lead\n\n\n\n\n#200\n\n\nTarzan\n\n\n\n\n#201\n\n\nTerror a 47 Metros\n\n\n\n\n#202\n\n\nThe Changeling\n\n\n\n\n#203\n\n\nThe Chosen - Temporada 2\n\n\n\n\n#204\n\n\nThe Disappointment’s Room\n\n\n\n\n#205\n\n\nThe Green Mile\n\n\n\n\n#206\n\n\nThe Hills Have Eyes\n\n\n\n\n#207\n\n\nThe Intern\n\n\n\n\n#208\n\n\nThe Land Before Time\n\n\n\n\n#209\n\n\nThe Life of David Gale\n\n\n\n\n#210\n\n\nThe Majestic\n\n\n\n\n#211\n\n\nThe Net\n\n\n\n\n#212\n\n\nThe Scorpion King\n\n\n\n\n#213\n\n\nThe Simpsons Movie\n\n\n\n\n#214\n\n\nThe Time Traveler’s Wife\n\n\n\n\n#215\n\n\nThe Truman Show\n\n\n\n\n#216\n\n\nThe Watcher\n\n\n\n\n#217\n\n\nThe Weatherman\n\n\n\n\n#218\n\n\nTorre Oscura\n\n\n\n\n#219\n\n\nToy Story 2\n\n\n\n\n#220\n\n\nToy Story 3\n\n\n\n\n#221\n\n\nTransformers - Temporada 1\n\n\n\n\n#222\n\n\nTransformers: Age of Extinction\n\n\n\n\n#223\n\n\nTrece Miedos\n\n\n\n\n#224\n\n\nTsunami\n\n\n\n\n#225\n\n\nTulum y Chichén Itzá\n\n\n\n\n\nU\n\n\n\n#226\n\n\nUn Gran Chico\n\n\n\n\n#227\n\n\nUn Irresistible Seductor\n\n\n\n\n#228\n\n\nUn Vecino Peligroso\n\n\n\n\n#229\n\n\nUnderworld: Evolution\n\n\n\n\n#230\n\n\nUnfaithful\n\n\n\n\n\nV\n\n\n\n#231\n\n\nV.I.P. - Temporada 2\n\n\n\n\n#232\n\n\nV.I.P. - Temporada 4\n\n\n\n\n#233\n\n\nValiant\n\n\n\n\n#234\n\n\nVan Helsing\n\n\n\n\n#235\n\n\nVangelis: Mythodea\n\n\n\n\n#236\n\n\nVerdugo de Almas\n\n\n\n\n#237\n\n\nVertical Limit\n\n\n\n\n#238\n\n\nVértigo\n\n\n\n\n#239\n\n\nViaje Insólito\n\n\n\n\n#240\n\n\nViajeros en el Tiempo - Primera Temporada\n\n\n\n\n#241\n\n\nVolver al Futuro: La Saga\n\n\n\n\n\nW\n\n\n\n#242\n\n\nWalking with Dinosaurs: The Movie\n\n\n\n\n#243\n\n\nWALL-E\n\n\n\n\n#244\n\n\nWallace y Gromit\n\n\n\n\n#245\n\n\nWallace y Gromit: La Batalla de los Vegetales\n\n\n\n\n#246\n\n\nWanda: El Infierno en el Paraíso\n\n\n\n\n#247\n\n\nWhat Women Want\n\n\n\n\n#248\n\n\nWhite Noise\n\n\n\n\n#249\n\n\nWorld Trade Center\n\n\n\n\n\nY\n\n\n\n#250\n\n\nYo, Robot\n\n\n\n\n\nZ\n\n\n\n#251\n\n\nZapata\n\n\n\n\n\n¿\n\n\n\n#252\n\n\n¿Y Dónde Está el Piloto?\n\n\n\n\n#253\n\n\n¿Y Dónde Están los Morgan?\n\n\n\n\n\nÁ\n\n\n\n#254\n\n\nÁngel-A\n\n\n\n\n\nGenerado a partir de transcripciones de audio • Total: 257 títulos"
+  },
+  {
+    "objectID": "QUICKSTART.html",
+    "href": "QUICKSTART.html",
+    "title": "🚀 Quick Start Guide",
+    "section": "",
+    "text": "Get started with Movie List Maker in 5 minutes!\n\n\n\nPython 3.8+\nTesseract OCR\nFFmpeg\n\n\n\n\n# 1. Clone and navigate\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# 2. Create virtual environment\npython3 -m venv venv\nsource venv/bin/activate  # Windows: venv\\Scripts\\activate\n\n# 3. Install dependencies\npip install -r requirements.txt\n\n\n\nUbuntu/Debian:\nsudo apt-get install tesseract-ocr ffmpeg\nmacOS:\nbrew install tesseract ffmpeg\nWindows: - Tesseract: https://github.com/UB-Mannheim/tesseract/wiki - FFmpeg: https://ffmpeg.org/download.html\n\n\n\n# Process a video\npython main.py your_video.mp4 --oleada 1\n\n# The script will:\n# ✓ Extract frames from video\n# ✓ Run OCR on frames\n# ✓ Transcribe audio with Whisper\n# ✓ Match and validate titles\n# ✓ Prompt you for low-confidence matches\n# ✓ Generate markdown output\n# ✓ Create Quarto website\n\n\n\n# Fast processing (tiny Whisper model)\npython main.py video.mp4 --oleada 1 --whisper-model tiny\n\n# Process multiple videos\npython main.py video1.mp4 video2.mp4 video3.mp4 --starting-oleada 1\n\n# Non-interactive mode\npython main.py video.mp4 --oleada 1 --no-interactive\n\n# Save frames for debugging\npython main.py video.mp4 --oleada 1 --save-frames\n\n# Spanish language videos\npython main.py video.mp4 --oleada 1 --language es\n\n# Auto-detect Spanish/English (default)\npython main.py video.mp4 --oleada 1\n\n\n\ncd quarto_site\nquarto render\nWebsite will be in quarto_site/docs/\n\n\n\n“Tesseract not found”\n# Verify installation\ntesseract --version\n“FFmpeg not found”\n# Verify installation\nffmpeg -version\nMemory issues\n# Use smaller Whisper model\npython main.py video.mp4 --oleada 1 --whisper-model tiny\n\n\n\n\nRead README.md for detailed documentation\nCheck OPTIMIZATION.md for performance tuning\nSee SETUP_GUIDE.md for OS-specific setup\n\n\nHappy Processing! 🎬"
+  },
+  {
+    "objectID": "QUICKSTART.html#prerequisites",
+    "href": "QUICKSTART.html#prerequisites",
+    "title": "🚀 Quick Start Guide",
+    "section": "",
+    "text": "Python 3.8+\nTesseract OCR\nFFmpeg"
+  },
+  {
+    "objectID": "QUICKSTART.html#installation",
+    "href": "QUICKSTART.html#installation",
+    "title": "🚀 Quick Start Guide",
+    "section": "",
+    "text": "# 1. Clone and navigate\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# 2. Create virtual environment\npython3 -m venv venv\nsource venv/bin/activate  # Windows: venv\\Scripts\\activate\n\n# 3. Install dependencies\npip install -r requirements.txt"
+  },
+  {
+    "objectID": "QUICKSTART.html#system-dependencies",
+    "href": "QUICKSTART.html#system-dependencies",
+    "title": "🚀 Quick Start Guide",
+    "section": "",
+    "text": "Ubuntu/Debian:\nsudo apt-get install tesseract-ocr ffmpeg\nmacOS:\nbrew install tesseract ffmpeg\nWindows: - Tesseract: https://github.com/UB-Mannheim/tesseract/wiki - FFmpeg: https://ffmpeg.org/download.html"
+  },
+  {
+    "objectID": "QUICKSTART.html#first-run",
+    "href": "QUICKSTART.html#first-run",
+    "title": "🚀 Quick Start Guide",
+    "section": "",
+    "text": "# Process a video\npython main.py your_video.mp4 --oleada 1\n\n# The script will:\n# ✓ Extract frames from video\n# ✓ Run OCR on frames\n# ✓ Transcribe audio with Whisper\n# ✓ Match and validate titles\n# ✓ Prompt you for low-confidence matches\n# ✓ Generate markdown output\n# ✓ Create Quarto website"
+  },
+  {
+    "objectID": "QUICKSTART.html#common-commands",
+    "href": "QUICKSTART.html#common-commands",
+    "title": "🚀 Quick Start Guide",
+    "section": "",
+    "text": "# Fast processing (tiny Whisper model)\npython main.py video.mp4 --oleada 1 --whisper-model tiny\n\n# Process multiple videos\npython main.py video1.mp4 video2.mp4 video3.mp4 --starting-oleada 1\n\n# Non-interactive mode\npython main.py video.mp4 --oleada 1 --no-interactive\n\n# Save frames for debugging\npython main.py video.mp4 --oleada 1 --save-frames\n\n# Spanish language videos\npython main.py video.mp4 --oleada 1 --language es\n\n# Auto-detect Spanish/English (default)\npython main.py video.mp4 --oleada 1"
+  },
+  {
+    "objectID": "QUICKSTART.html#build-website",
+    "href": "QUICKSTART.html#build-website",
+    "title": "🚀 Quick Start Guide",
+    "section": "",
+    "text": "cd quarto_site\nquarto render\nWebsite will be in quarto_site/docs/"
+  },
+  {
+    "objectID": "QUICKSTART.html#troubleshooting",
+    "href": "QUICKSTART.html#troubleshooting",
+    "title": "🚀 Quick Start Guide",
+    "section": "",
+    "text": "“Tesseract not found”\n# Verify installation\ntesseract --version\n“FFmpeg not found”\n# Verify installation\nffmpeg -version\nMemory issues\n# Use smaller Whisper model\npython main.py video.mp4 --oleada 1 --whisper-model tiny"
+  },
+  {
+    "objectID": "QUICKSTART.html#next-steps",
+    "href": "QUICKSTART.html#next-steps",
+    "title": "🚀 Quick Start Guide",
+    "section": "",
+    "text": "Read README.md for detailed documentation\nCheck OPTIMIZATION.md for performance tuning\nSee SETUP_GUIDE.md for OS-specific setup\n\n\nHappy Processing! 🎬"
+  },
+  {
+    "objectID": "OPTIMIZATION.html",
+    "href": "OPTIMIZATION.html",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "Comprehensive guide to optimizing performance and reducing resource usage.\n\n\n\nPerformance Benchmarks\nOptimization Strategies\nAlternative Lightweight Approaches\nHardware Acceleration\nMemory Optimization\nProcessing Time Comparison\n\n\n\n\n\n\n\n\n\n\nConfiguration\nProcessing Time\nMemory Usage\nAccuracy\n\n\n\n\nTiny Whisper, 60 frame interval\n~2 minutes\n~1.5 GB\nGood\n\n\nBase Whisper, 30 frame interval\n~5 minutes\n~2 GB\nBetter\n\n\nSmall Whisper, 30 frame interval\n~8 minutes\n~3 GB\nBest\n\n\nLarge Whisper, 15 frame interval\n~20 minutes\n~8 GB\nExcellent\n\n\n\n\n\n\n\n\n\n\n\n\n# Default: Extract 1 frame every 30 frames\nprocessor = VideoProcessor(frame_interval=30)\n\n\n\nFast Processing (Lower Accuracy)\npython main.py video.mp4 --oleada 1 --frame-interval 90\n# Extracts 1 frame every 3 seconds (at 30fps)\n# ~3x faster frame processing\nBalanced (Recommended)\npython main.py video.mp4 --oleada 1 --frame-interval 30\n# Extracts 1 frame per second (at 30fps)\n# Good balance of speed and accuracy\nHigh Accuracy (Slower)\npython main.py video.mp4 --oleada 1 --frame-interval 15\n# Extracts 2 frames per second (at 30fps)\n# Better for fast-moving content\n\n\n\n\n\n\n\n\n\nModel\nSize\nSpeed\nAccuracy\nRAM\nBest For\n\n\n\n\nTiny\n39M\nFastest\nGood\n~1GB\nClear audio, quick tests\n\n\nBase\n74M\nFast\nBetter\n~1.5GB\nRecommended default\n\n\nSmall\n244M\nMedium\nGreat\n~2.5GB\nHigh accuracy needs\n\n\nMedium\n769M\nSlow\nExcellent\n~5GB\nProfessional use\n\n\nLarge\n1550M\nVery Slow\nBest\n~10GB\nMaximum accuracy\n\n\n\n\n\n\n# Fastest processing\npython main.py video.mp4 --oleada 1 --whisper-model tiny\n\n# Balanced (default)\npython main.py video.mp4 --oleada 1 --whisper-model base\n\n# High accuracy\npython main.py video.mp4 --oleada 1 --whisper-model small\n\n\n\n\n\n\nModify src/video_processor.py for better OCR accuracy:\ndef preprocess_frame(self, frame: np.ndarray) -&gt; np.ndarray:\n    \"\"\"Enhanced preprocessing for better OCR.\"\"\"\n    # Convert to grayscale\n    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)\n    \n    # Denoise\n    denoised = cv2.fastNlMeansDenoising(gray)\n    \n    # Increase contrast\n    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))\n    enhanced = clahe.apply(denoised)\n    \n    # Threshold\n    _, thresh = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)\n    \n    return thresh\n\n\n\n# In ocr_extractor.py, use raw frames\ndef extract_text_from_frame(self, frame: np.ndarray) -&gt; List[Dict]:\n    # Skip preprocessing, use frame directly\n    pil_image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))\n    # ... rest of code\n\n\n\n\n\n\n\n\nPros: - No Whisper model loading (~5GB saved) - Faster processing (no audio transcription) - Lower memory usage\nCons: - Less accurate for unclear text - No audio validation\nImplementation:\nCreate main_ocr_only.py:\nfrom src.video_processor import VideoProcessor\nfrom src.ocr_extractor import OCRExtractor\nfrom src.markdown_generator import MarkdownGenerator\n\ndef process_ocr_only(video_path, oleada_number):\n    # Extract frames\n    video_proc = VideoProcessor(frame_interval=60)\n    frames = video_proc.extract_frames(video_path)\n    \n    # OCR only\n    ocr = OCRExtractor()\n    titles = ocr.extract_movie_titles(frames)\n    \n    # Generate output\n    md_gen = MarkdownGenerator()\n    content = md_gen.generate_movie_list(titles, oleada_number)\n    md_gen.save_markdown(content, f'oleada-{oleada_number:02d}')\n\n# Usage\nprocess_ocr_only('video.mp4', 1)\n\n\n\nPros: - No frame extraction overhead - No OCR processing - Faster for clear audio\nCons: - No visual validation - Relies entirely on audio quality\nImplementation:\nCreate main_audio_only.py:\nfrom src.audio_transcriber import AudioTranscriber\nfrom src.markdown_generator import MarkdownGenerator\n\ndef process_audio_only(video_path, oleada_number):\n    # Transcribe audio\n    transcriber = AudioTranscriber(model_size='tiny')\n    titles = transcriber.extract_movie_titles(video_path)\n    \n    # Generate output\n    md_gen = MarkdownGenerator()\n    content = md_gen.generate_movie_list(titles, oleada_number)\n    md_gen.save_markdown(content, f'oleada-{oleada_number:02d}')\n\n# Usage\nprocess_audio_only('video.mp4', 1)\n\n\n\nStrategy: Extract frames only at specific time intervals\n# In video_processor.py\ndef extract_frames_sparse(self, video_path: str, interval_seconds: int = 5):\n    \"\"\"Extract frames at fixed time intervals.\"\"\"\n    cap = cv2.VideoCapture(video_path)\n    fps = cap.get(cv2.CAP_PROP_FPS)\n    \n    frames = []\n    frame_interval = int(fps * interval_seconds)\n    frame_count = 0\n    \n    while True:\n        ret, frame = cap.read()\n        if not ret:\n            break\n        \n        if frame_count % frame_interval == 0:\n            timestamp = frame_count / fps\n            frames.append((frame, timestamp))\n        \n        frame_count += 1\n    \n    cap.release()\n    return frames\nUsage:\n# Extract 1 frame every 5 seconds\npython main.py video.mp4 --oleada 1 --frame-interval 150  # 5 sec * 30fps\n\n\n\nFor processing multiple videos simultaneously:\nfrom multiprocessing import Pool\nfrom src.movie_processor import MovieProcessor\n\ndef process_single(args):\n    video_path, oleada_num = args\n    processor = MovieProcessor(whisper_model='tiny')\n    return processor.process_video(video_path, oleada_num, interactive=False)\n\ndef process_parallel(video_paths):\n    args = [(path, idx+1) for idx, path in enumerate(video_paths)]\n    \n    with Pool(processes=4) as pool:\n        results = pool.map(process_single, args)\n    \n    return results\n\n# Usage\nvideos = ['video1.mp4', 'video2.mp4', 'video3.mp4', 'video4.mp4']\nresults = process_parallel(videos)\n\n\n\n\n\n\n\nRequirements: - NVIDIA GPU with CUDA support - CUDA Toolkit installed\nInstallation:\n# Install CUDA-enabled PyTorch first\npip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118\n\n# Install Whisper\npip install openai-whisper\nPerformance Gain: 5-10x faster transcription\n\n\n\n# In video_processor.py\nimport cv2\n\n# Check CUDA availability\nif cv2.cuda.getCudaEnabledDeviceCount() &gt; 0:\n    print(\"CUDA available for OpenCV\")\n    # Use GPU-accelerated functions\n    gpu_frame = cv2.cuda_GpuMat()\n    gpu_frame.upload(frame)\n    # Process on GPU\n\n\n\n\n\n\n\ndef process_video_chunked(video_path, chunk_size=100):\n    \"\"\"Process video in chunks to reduce memory usage.\"\"\"\n    cap = cv2.VideoCapture(video_path)\n    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))\n    \n    all_titles = []\n    \n    for start in range(0, total_frames, chunk_size):\n        # Process chunk\n        chunk_frames = extract_frames_range(video_path, start, start + chunk_size)\n        chunk_titles = ocr_extractor.extract_movie_titles(chunk_frames)\n        all_titles.extend(chunk_titles)\n        \n        # Clear memory\n        del chunk_frames\n    \n    return all_titles\n\n\n\ndef resize_frame(frame, max_width=1280):\n    \"\"\"Resize frame to reduce memory usage.\"\"\"\n    height, width = frame.shape[:2]\n    \n    if width &gt; max_width:\n        ratio = max_width / width\n        new_height = int(height * ratio)\n        frame = cv2.resize(frame, (max_width, new_height))\n    \n    return frame\n\n\n\nimport gc\nimport torch\n\n# After transcription\ndel model\ngc.collect()\nif torch.cuda.is_available():\n    torch.cuda.empty_cache()\n\n\n\n\n\n\n\n\n\n\nApproach\nTime\nMemory\nAccuracy\n\n\n\n\nFull Pipeline (Base)\n5 min\n2 GB\n95%\n\n\nOCR Only\n1 min\n500 MB\n75%\n\n\nAudio Only (Tiny)\n2 min\n1 GB\n85%\n\n\nSparse Sampling (10s)\n3 min\n1.5 GB\n90%\n\n\nGPU Accelerated\n1 min\n3 GB\n95%\n\n\nParallel (4 videos)\n6 min\n8 GB\n95%\n\n\n\n\n\n\n\n\n\nUse Case\nRecommended Configuration\n\n\n\n\nQuick Test\n--whisper-model tiny --frame-interval 90\n\n\nProduction\n--whisper-model base --frame-interval 30\n\n\nHigh Accuracy\n--whisper-model small --frame-interval 15\n\n\nLow Memory\n--whisper-model tiny --frame-interval 60\n\n\nBatch Processing\nParallel processing with tiny model\n\n\nGPU Available\nCUDA Whisper with base model\n\n\n\n\n\n\n\n\n\nStart Small: Test with tiny model first\nMonitor Resources: Use htop (Linux) or Task Manager (Windows)\nBatch Wisely: Process 2-3 videos at a time max\nClean Up: Delete intermediate frames after processing\nProfile Code: Use cProfile to identify bottlenecks\n\n# Profile your run\npython -m cProfile -o profile.stats main.py video.mp4 --oleada 1\n\n# Analyze results\npython -c \"import pstats; p = pstats.Stats('profile.stats'); p.sort_stats('cumulative').print_stats(20)\"\n\n\n\n\nThe default configuration (base Whisper, 30 frame interval) provides the best balance for most use cases. Adjust based on your specific needs:\n\nSpeed Priority: Use tiny model with 60+ frame interval\nAccuracy Priority: Use small model with 15-30 frame interval\n\nMemory Constrained: Use OCR-only or audio-only mode\nGPU Available: Enable CUDA for 5-10x speedup\n\n\nQuestions? Open an issue on GitHub!"
+  },
+  {
+    "objectID": "OPTIMIZATION.html#table-of-contents",
+    "href": "OPTIMIZATION.html#table-of-contents",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "Performance Benchmarks\nOptimization Strategies\nAlternative Lightweight Approaches\nHardware Acceleration\nMemory Optimization\nProcessing Time Comparison"
+  },
+  {
+    "objectID": "OPTIMIZATION.html#performance-benchmarks",
+    "href": "OPTIMIZATION.html#performance-benchmarks",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "Configuration\nProcessing Time\nMemory Usage\nAccuracy\n\n\n\n\nTiny Whisper, 60 frame interval\n~2 minutes\n~1.5 GB\nGood\n\n\nBase Whisper, 30 frame interval\n~5 minutes\n~2 GB\nBetter\n\n\nSmall Whisper, 30 frame interval\n~8 minutes\n~3 GB\nBest\n\n\nLarge Whisper, 15 frame interval\n~20 minutes\n~8 GB\nExcellent"
+  },
+  {
+    "objectID": "OPTIMIZATION.html#optimization-strategies",
+    "href": "OPTIMIZATION.html#optimization-strategies",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "# Default: Extract 1 frame every 30 frames\nprocessor = VideoProcessor(frame_interval=30)\n\n\n\nFast Processing (Lower Accuracy)\npython main.py video.mp4 --oleada 1 --frame-interval 90\n# Extracts 1 frame every 3 seconds (at 30fps)\n# ~3x faster frame processing\nBalanced (Recommended)\npython main.py video.mp4 --oleada 1 --frame-interval 30\n# Extracts 1 frame per second (at 30fps)\n# Good balance of speed and accuracy\nHigh Accuracy (Slower)\npython main.py video.mp4 --oleada 1 --frame-interval 15\n# Extracts 2 frames per second (at 30fps)\n# Better for fast-moving content\n\n\n\n\n\n\n\n\n\nModel\nSize\nSpeed\nAccuracy\nRAM\nBest For\n\n\n\n\nTiny\n39M\nFastest\nGood\n~1GB\nClear audio, quick tests\n\n\nBase\n74M\nFast\nBetter\n~1.5GB\nRecommended default\n\n\nSmall\n244M\nMedium\nGreat\n~2.5GB\nHigh accuracy needs\n\n\nMedium\n769M\nSlow\nExcellent\n~5GB\nProfessional use\n\n\nLarge\n1550M\nVery Slow\nBest\n~10GB\nMaximum accuracy\n\n\n\n\n\n\n# Fastest processing\npython main.py video.mp4 --oleada 1 --whisper-model tiny\n\n# Balanced (default)\npython main.py video.mp4 --oleada 1 --whisper-model base\n\n# High accuracy\npython main.py video.mp4 --oleada 1 --whisper-model small\n\n\n\n\n\n\nModify src/video_processor.py for better OCR accuracy:\ndef preprocess_frame(self, frame: np.ndarray) -&gt; np.ndarray:\n    \"\"\"Enhanced preprocessing for better OCR.\"\"\"\n    # Convert to grayscale\n    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)\n    \n    # Denoise\n    denoised = cv2.fastNlMeansDenoising(gray)\n    \n    # Increase contrast\n    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))\n    enhanced = clahe.apply(denoised)\n    \n    # Threshold\n    _, thresh = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)\n    \n    return thresh\n\n\n\n# In ocr_extractor.py, use raw frames\ndef extract_text_from_frame(self, frame: np.ndarray) -&gt; List[Dict]:\n    # Skip preprocessing, use frame directly\n    pil_image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))\n    # ... rest of code"
+  },
+  {
+    "objectID": "OPTIMIZATION.html#alternative-lightweight-approaches",
+    "href": "OPTIMIZATION.html#alternative-lightweight-approaches",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "Pros: - No Whisper model loading (~5GB saved) - Faster processing (no audio transcription) - Lower memory usage\nCons: - Less accurate for unclear text - No audio validation\nImplementation:\nCreate main_ocr_only.py:\nfrom src.video_processor import VideoProcessor\nfrom src.ocr_extractor import OCRExtractor\nfrom src.markdown_generator import MarkdownGenerator\n\ndef process_ocr_only(video_path, oleada_number):\n    # Extract frames\n    video_proc = VideoProcessor(frame_interval=60)\n    frames = video_proc.extract_frames(video_path)\n    \n    # OCR only\n    ocr = OCRExtractor()\n    titles = ocr.extract_movie_titles(frames)\n    \n    # Generate output\n    md_gen = MarkdownGenerator()\n    content = md_gen.generate_movie_list(titles, oleada_number)\n    md_gen.save_markdown(content, f'oleada-{oleada_number:02d}')\n\n# Usage\nprocess_ocr_only('video.mp4', 1)\n\n\n\nPros: - No frame extraction overhead - No OCR processing - Faster for clear audio\nCons: - No visual validation - Relies entirely on audio quality\nImplementation:\nCreate main_audio_only.py:\nfrom src.audio_transcriber import AudioTranscriber\nfrom src.markdown_generator import MarkdownGenerator\n\ndef process_audio_only(video_path, oleada_number):\n    # Transcribe audio\n    transcriber = AudioTranscriber(model_size='tiny')\n    titles = transcriber.extract_movie_titles(video_path)\n    \n    # Generate output\n    md_gen = MarkdownGenerator()\n    content = md_gen.generate_movie_list(titles, oleada_number)\n    md_gen.save_markdown(content, f'oleada-{oleada_number:02d}')\n\n# Usage\nprocess_audio_only('video.mp4', 1)\n\n\n\nStrategy: Extract frames only at specific time intervals\n# In video_processor.py\ndef extract_frames_sparse(self, video_path: str, interval_seconds: int = 5):\n    \"\"\"Extract frames at fixed time intervals.\"\"\"\n    cap = cv2.VideoCapture(video_path)\n    fps = cap.get(cv2.CAP_PROP_FPS)\n    \n    frames = []\n    frame_interval = int(fps * interval_seconds)\n    frame_count = 0\n    \n    while True:\n        ret, frame = cap.read()\n        if not ret:\n            break\n        \n        if frame_count % frame_interval == 0:\n            timestamp = frame_count / fps\n            frames.append((frame, timestamp))\n        \n        frame_count += 1\n    \n    cap.release()\n    return frames\nUsage:\n# Extract 1 frame every 5 seconds\npython main.py video.mp4 --oleada 1 --frame-interval 150  # 5 sec * 30fps\n\n\n\nFor processing multiple videos simultaneously:\nfrom multiprocessing import Pool\nfrom src.movie_processor import MovieProcessor\n\ndef process_single(args):\n    video_path, oleada_num = args\n    processor = MovieProcessor(whisper_model='tiny')\n    return processor.process_video(video_path, oleada_num, interactive=False)\n\ndef process_parallel(video_paths):\n    args = [(path, idx+1) for idx, path in enumerate(video_paths)]\n    \n    with Pool(processes=4) as pool:\n        results = pool.map(process_single, args)\n    \n    return results\n\n# Usage\nvideos = ['video1.mp4', 'video2.mp4', 'video3.mp4', 'video4.mp4']\nresults = process_parallel(videos)"
+  },
+  {
+    "objectID": "OPTIMIZATION.html#hardware-acceleration",
+    "href": "OPTIMIZATION.html#hardware-acceleration",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "Requirements: - NVIDIA GPU with CUDA support - CUDA Toolkit installed\nInstallation:\n# Install CUDA-enabled PyTorch first\npip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118\n\n# Install Whisper\npip install openai-whisper\nPerformance Gain: 5-10x faster transcription\n\n\n\n# In video_processor.py\nimport cv2\n\n# Check CUDA availability\nif cv2.cuda.getCudaEnabledDeviceCount() &gt; 0:\n    print(\"CUDA available for OpenCV\")\n    # Use GPU-accelerated functions\n    gpu_frame = cv2.cuda_GpuMat()\n    gpu_frame.upload(frame)\n    # Process on GPU"
+  },
+  {
+    "objectID": "OPTIMIZATION.html#memory-optimization",
+    "href": "OPTIMIZATION.html#memory-optimization",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "def process_video_chunked(video_path, chunk_size=100):\n    \"\"\"Process video in chunks to reduce memory usage.\"\"\"\n    cap = cv2.VideoCapture(video_path)\n    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))\n    \n    all_titles = []\n    \n    for start in range(0, total_frames, chunk_size):\n        # Process chunk\n        chunk_frames = extract_frames_range(video_path, start, start + chunk_size)\n        chunk_titles = ocr_extractor.extract_movie_titles(chunk_frames)\n        all_titles.extend(chunk_titles)\n        \n        # Clear memory\n        del chunk_frames\n    \n    return all_titles\n\n\n\ndef resize_frame(frame, max_width=1280):\n    \"\"\"Resize frame to reduce memory usage.\"\"\"\n    height, width = frame.shape[:2]\n    \n    if width &gt; max_width:\n        ratio = max_width / width\n        new_height = int(height * ratio)\n        frame = cv2.resize(frame, (max_width, new_height))\n    \n    return frame\n\n\n\nimport gc\nimport torch\n\n# After transcription\ndel model\ngc.collect()\nif torch.cuda.is_available():\n    torch.cuda.empty_cache()"
+  },
+  {
+    "objectID": "OPTIMIZATION.html#processing-time-comparison",
+    "href": "OPTIMIZATION.html#processing-time-comparison",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "Approach\nTime\nMemory\nAccuracy\n\n\n\n\nFull Pipeline (Base)\n5 min\n2 GB\n95%\n\n\nOCR Only\n1 min\n500 MB\n75%\n\n\nAudio Only (Tiny)\n2 min\n1 GB\n85%\n\n\nSparse Sampling (10s)\n3 min\n1.5 GB\n90%\n\n\nGPU Accelerated\n1 min\n3 GB\n95%\n\n\nParallel (4 videos)\n6 min\n8 GB\n95%\n\n\n\n\n\n\n\n\n\nUse Case\nRecommended Configuration\n\n\n\n\nQuick Test\n--whisper-model tiny --frame-interval 90\n\n\nProduction\n--whisper-model base --frame-interval 30\n\n\nHigh Accuracy\n--whisper-model small --frame-interval 15\n\n\nLow Memory\n--whisper-model tiny --frame-interval 60\n\n\nBatch Processing\nParallel processing with tiny model\n\n\nGPU Available\nCUDA Whisper with base model"
+  },
+  {
+    "objectID": "OPTIMIZATION.html#best-practices",
+    "href": "OPTIMIZATION.html#best-practices",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "Start Small: Test with tiny model first\nMonitor Resources: Use htop (Linux) or Task Manager (Windows)\nBatch Wisely: Process 2-3 videos at a time max\nClean Up: Delete intermediate frames after processing\nProfile Code: Use cProfile to identify bottlenecks\n\n# Profile your run\npython -m cProfile -o profile.stats main.py video.mp4 --oleada 1\n\n# Analyze results\npython -c \"import pstats; p = pstats.Stats('profile.stats'); p.sort_stats('cumulative').print_stats(20)\""
+  },
+  {
+    "objectID": "OPTIMIZATION.html#conclusion",
+    "href": "OPTIMIZATION.html#conclusion",
+    "title": "⚡ Optimization Guide - Movie List Maker",
+    "section": "",
+    "text": "The default configuration (base Whisper, 30 frame interval) provides the best balance for most use cases. Adjust based on your specific needs:\n\nSpeed Priority: Use tiny model with 60+ frame interval\nAccuracy Priority: Use small model with 15-30 frame interval\n\nMemory Constrained: Use OCR-only or audio-only mode\nGPU Available: Enable CUDA for 5-10x speedup\n\n\nQuestions? Open an issue on GitHub!"
+  },
+  {
+    "objectID": "SETUP_GUIDE.html",
+    "href": "SETUP_GUIDE.html",
+    "title": "🛠️ Setup Guide - Movie List Maker",
+    "section": "",
+    "text": "Complete setup instructions for different operating systems.\n\n\n\nLinux Setup\nmacOS Setup\nWindows Setup\nVerification\nFirst Run\n\n\n\n\n\n\n\n# 1. Update package list\nsudo apt-get update\n\n# 2. Install system dependencies\nsudo apt-get install -y python3 python3-pip python3-venv tesseract-ocr ffmpeg\n\n# 3. Clone repository\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# 4. Create virtual environment\npython3 -m venv venv\nsource venv/bin/activate\n\n# 5. Install Python packages\npip install --upgrade pip\npip install -r requirements.txt\n\n# 6. Install Quarto (optional)\nwget https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.549/quarto-1.4.549-linux-amd64.deb\nsudo dpkg -i quarto-1.4.549-linux-amd64.deb\n\n\n\n# 1. Install system dependencies\nsudo dnf install -y python3 python3-pip tesseract ffmpeg\n\n# 2. Follow steps 3-6 from Ubuntu instructions above\n\n\n\n# 1. Install system dependencies\nsudo pacman -S python python-pip tesseract ffmpeg\n\n# 2. Follow steps 3-6 from Ubuntu instructions above\n\n\n\n\n\n\n\n# 1. Install Homebrew (if not already installed)\n/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"\n\n# 2. Install system dependencies\nbrew install python tesseract ffmpeg\n\n# 3. Clone repository\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# 4. Create virtual environment\npython3 -m venv venv\nsource venv/bin/activate\n\n# 5. Install Python packages\npip install --upgrade pip\npip install -r requirements.txt\n\n# 6. Install Quarto (optional)\nbrew install --cask quarto\n\n\n\n\n\n\n\n# 1. Install Chocolatey (run PowerShell as Administrator)\nSet-ExecutionPolicy Bypass -Scope Process -Force\n[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072\niex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))\n\n# 2. Install dependencies\nchoco install -y python tesseract ffmpeg\n\n# 3. Clone repository (in regular PowerShell/CMD)\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# 4. Create virtual environment\npython -m venv venv\nvenv\\Scripts\\activate\n\n# 5. Install Python packages\npip install --upgrade pip\npip install -r requirements.txt\n\n# 6. Install Quarto (optional)\nchoco install -y quarto\n\n\n\n\n\n\nDownload Python 3.8+ from https://www.python.org/downloads/\nRun installer, check “Add Python to PATH”\nVerify: python --version\n\n\n\n\n\nDownload from https://github.com/UB-Mannheim/tesseract/wiki\nRun installer (default location: C:\\Program Files\\Tesseract-OCR)\nAdd to PATH:\n\nRight-click “This PC” → Properties → Advanced System Settings\nEnvironment Variables → System Variables → Path → Edit\nAdd: C:\\Program Files\\Tesseract-OCR\n\n\n\n\n\n\nDownload from https://ffmpeg.org/download.html\nExtract to C:\\ffmpeg\nAdd C:\\ffmpeg\\bin to PATH (same process as Tesseract)\n\n\n\n\n# Clone repository\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# Create virtual environment\npython -m venv venv\nvenv\\Scripts\\activate\n\n# Install Python packages\npip install --upgrade pip\npip install -r requirements.txt\n\n\n\nDownload from https://quarto.org/docs/get-started/\n\n\n\n\n\n\n\n\n# Check Python\npython --version  # Should be 3.8+\n\n# Check Tesseract\ntesseract --version  # Should show version info\n\n# Check FFmpeg\nffmpeg -version  # Should show version info\n\n# Check Quarto (optional)\nquarto --version  # Should show version info\n\n\n\n# Activate virtual environment first\nsource venv/bin/activate  # Linux/macOS\n# OR\nvenv\\Scripts\\activate  # Windows\n\n# Check installations\npython -c \"import cv2; print('OpenCV:', cv2.__version__)\"\npython -c \"import pytesseract; print('pytesseract: OK')\"\npython -c \"import whisper; print('Whisper: OK')\"\n\n\n\n\n\n\n\n# Activate virtual environment\nsource venv/bin/activate  # Linux/macOS\n# OR\nvenv\\Scripts\\activate  # Windows\n\n# Run with a test video\npython main.py path/to/test_video.mp4 --oleada 1 --whisper-model tiny\n\n# This will:\n# 1. Extract frames from video\n# 2. Run OCR on frames\n# 3. Transcribe audio with Whisper\n# 4. Match and validate titles\n# 5. Generate markdown output\n# 6. Create Quarto website\n\n\n\n======================================================================\n🎬 Movie List Maker\n======================================================================\nVideos to process: 1\nWhisper model: tiny\nFrame interval: 30\nConfidence threshold: 90.0%\nInteractive mode: Yes\n======================================================================\n\n======================================================================\n🎬 Processing Oleada 01: test_video.mp4\n======================================================================\n\n📹 Step 1/5: Extracting frames from video...\nProcessing video: test_video.mp4\nFPS: 30.0, Total frames: 900\nExtracted 30 frames from 900 total frames\n\n🔍 Step 2/5: Running OCR on 30 frames...\n   Found 5 potential titles via OCR\n\n🎤 Step 3/5: Transcribing audio with Whisper...\nLoading Whisper model: tiny\nWhisper model loaded successfully\nTranscribing audio from: test_video.mp4\nTranscription complete. Detected language: en\n   Found 5 potential titles via audio\n\n✅ Step 4/5: Matching and validating titles...\n\n📝 Step 5/5: Generating markdown output...\n✅ Markdown saved to: output/oleada-01.qmd\n\n======================================================================\n✨ Processing complete! Found 5 movies\n======================================================================\n\n\n\n\n\n\n\nLinux/macOS:\nwhich tesseract  # Find installation path\nexport PATH=$PATH:/path/to/tesseract\nWindows: Add Tesseract to PATH or set environment variable:\n# In ocr_extractor.py, add:\npytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'\n\n\n\nEnsure FFmpeg is in PATH:\n# Linux/macOS\nwhich ffmpeg\n\n# Windows\nwhere ffmpeg\n\n\n\nLinux/macOS:\n# Deactivate and recreate\ndeactivate\nrm -rf venv\npython3 -m venv venv\nsource venv/bin/activate\npip install -r requirements.txt\nWindows:\ndeactivate\nrmdir /s venv\npython -m venv venv\nvenv\\Scripts\\activate\npip install -r requirements.txt\n\n\n\n# Don't use sudo with pip\n# Instead, ensure virtual environment is activated\nsource venv/bin/activate\npip install -r requirements.txt\n\n\n\n\n\n\n✅ Verify all dependencies are installed\n✅ Test with a sample video\n📖 Read the README.md for usage examples\n🚀 Process your movie videos!\n🌐 Build and deploy your Quarto website\n\n\nNeed Help? Open an issue on GitHub!"
+  },
+  {
+    "objectID": "SETUP_GUIDE.html#table-of-contents",
+    "href": "SETUP_GUIDE.html#table-of-contents",
+    "title": "🛠️ Setup Guide - Movie List Maker",
+    "section": "",
+    "text": "Linux Setup\nmacOS Setup\nWindows Setup\nVerification\nFirst Run"
+  },
+  {
+    "objectID": "SETUP_GUIDE.html#linux-setup",
+    "href": "SETUP_GUIDE.html#linux-setup",
+    "title": "🛠️ Setup Guide - Movie List Maker",
+    "section": "",
+    "text": "# 1. Update package list\nsudo apt-get update\n\n# 2. Install system dependencies\nsudo apt-get install -y python3 python3-pip python3-venv tesseract-ocr ffmpeg\n\n# 3. Clone repository\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# 4. Create virtual environment\npython3 -m venv venv\nsource venv/bin/activate\n\n# 5. Install Python packages\npip install --upgrade pip\npip install -r requirements.txt\n\n# 6. Install Quarto (optional)\nwget https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.549/quarto-1.4.549-linux-amd64.deb\nsudo dpkg -i quarto-1.4.549-linux-amd64.deb\n\n\n\n# 1. Install system dependencies\nsudo dnf install -y python3 python3-pip tesseract ffmpeg\n\n# 2. Follow steps 3-6 from Ubuntu instructions above\n\n\n\n# 1. Install system dependencies\nsudo pacman -S python python-pip tesseract ffmpeg\n\n# 2. Follow steps 3-6 from Ubuntu instructions above"
+  },
+  {
+    "objectID": "SETUP_GUIDE.html#macos-setup",
+    "href": "SETUP_GUIDE.html#macos-setup",
+    "title": "🛠️ Setup Guide - Movie List Maker",
+    "section": "",
+    "text": "# 1. Install Homebrew (if not already installed)\n/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"\n\n# 2. Install system dependencies\nbrew install python tesseract ffmpeg\n\n# 3. Clone repository\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# 4. Create virtual environment\npython3 -m venv venv\nsource venv/bin/activate\n\n# 5. Install Python packages\npip install --upgrade pip\npip install -r requirements.txt\n\n# 6. Install Quarto (optional)\nbrew install --cask quarto"
+  },
+  {
+    "objectID": "SETUP_GUIDE.html#windows-setup",
+    "href": "SETUP_GUIDE.html#windows-setup",
+    "title": "🛠️ Setup Guide - Movie List Maker",
+    "section": "",
+    "text": "# 1. Install Chocolatey (run PowerShell as Administrator)\nSet-ExecutionPolicy Bypass -Scope Process -Force\n[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072\niex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))\n\n# 2. Install dependencies\nchoco install -y python tesseract ffmpeg\n\n# 3. Clone repository (in regular PowerShell/CMD)\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# 4. Create virtual environment\npython -m venv venv\nvenv\\Scripts\\activate\n\n# 5. Install Python packages\npip install --upgrade pip\npip install -r requirements.txt\n\n# 6. Install Quarto (optional)\nchoco install -y quarto\n\n\n\n\n\n\nDownload Python 3.8+ from https://www.python.org/downloads/\nRun installer, check “Add Python to PATH”\nVerify: python --version\n\n\n\n\n\nDownload from https://github.com/UB-Mannheim/tesseract/wiki\nRun installer (default location: C:\\Program Files\\Tesseract-OCR)\nAdd to PATH:\n\nRight-click “This PC” → Properties → Advanced System Settings\nEnvironment Variables → System Variables → Path → Edit\nAdd: C:\\Program Files\\Tesseract-OCR\n\n\n\n\n\n\nDownload from https://ffmpeg.org/download.html\nExtract to C:\\ffmpeg\nAdd C:\\ffmpeg\\bin to PATH (same process as Tesseract)\n\n\n\n\n# Clone repository\ngit clone https://github.com/yourusername/Movie-List-Maker.git\ncd Movie-List-Maker\n\n# Create virtual environment\npython -m venv venv\nvenv\\Scripts\\activate\n\n# Install Python packages\npip install --upgrade pip\npip install -r requirements.txt\n\n\n\nDownload from https://quarto.org/docs/get-started/"
+  },
+  {
+    "objectID": "SETUP_GUIDE.html#verification",
+    "href": "SETUP_GUIDE.html#verification",
+    "title": "🛠️ Setup Guide - Movie List Maker",
+    "section": "",
+    "text": "# Check Python\npython --version  # Should be 3.8+\n\n# Check Tesseract\ntesseract --version  # Should show version info\n\n# Check FFmpeg\nffmpeg -version  # Should show version info\n\n# Check Quarto (optional)\nquarto --version  # Should show version info\n\n\n\n# Activate virtual environment first\nsource venv/bin/activate  # Linux/macOS\n# OR\nvenv\\Scripts\\activate  # Windows\n\n# Check installations\npython -c \"import cv2; print('OpenCV:', cv2.__version__)\"\npython -c \"import pytesseract; print('pytesseract: OK')\"\npython -c \"import whisper; print('Whisper: OK')\""
+  },
+  {
+    "objectID": "SETUP_GUIDE.html#first-run",
+    "href": "SETUP_GUIDE.html#first-run",
+    "title": "🛠️ Setup Guide - Movie List Maker",
+    "section": "",
+    "text": "# Activate virtual environment\nsource venv/bin/activate  # Linux/macOS\n# OR\nvenv\\Scripts\\activate  # Windows\n\n# Run with a test video\npython main.py path/to/test_video.mp4 --oleada 1 --whisper-model tiny\n\n# This will:\n# 1. Extract frames from video\n# 2. Run OCR on frames\n# 3. Transcribe audio with Whisper\n# 4. Match and validate titles\n# 5. Generate markdown output\n# 6. Create Quarto website\n\n\n\n======================================================================\n🎬 Movie List Maker\n======================================================================\nVideos to process: 1\nWhisper model: tiny\nFrame interval: 30\nConfidence threshold: 90.0%\nInteractive mode: Yes\n======================================================================\n\n======================================================================\n🎬 Processing Oleada 01: test_video.mp4\n======================================================================\n\n📹 Step 1/5: Extracting frames from video...\nProcessing video: test_video.mp4\nFPS: 30.0, Total frames: 900\nExtracted 30 frames from 900 total frames\n\n🔍 Step 2/5: Running OCR on 30 frames...\n   Found 5 potential titles via OCR\n\n🎤 Step 3/5: Transcribing audio with Whisper...\nLoading Whisper model: tiny\nWhisper model loaded successfully\nTranscribing audio from: test_video.mp4\nTranscription complete. Detected language: en\n   Found 5 potential titles via audio\n\n✅ Step 4/5: Matching and validating titles...\n\n📝 Step 5/5: Generating markdown output...\n✅ Markdown saved to: output/oleada-01.qmd\n\n======================================================================\n✨ Processing complete! Found 5 movies\n======================================================================"
+  },
+  {
+    "objectID": "SETUP_GUIDE.html#troubleshooting",
+    "href": "SETUP_GUIDE.html#troubleshooting",
+    "title": "🛠️ Setup Guide - Movie List Maker",
+    "section": "",
+    "text": "Linux/macOS:\nwhich tesseract  # Find installation path\nexport PATH=$PATH:/path/to/tesseract\nWindows: Add Tesseract to PATH or set environment variable:\n# In ocr_extractor.py, add:\npytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'\n\n\n\nEnsure FFmpeg is in PATH:\n# Linux/macOS\nwhich ffmpeg\n\n# Windows\nwhere ffmpeg\n\n\n\nLinux/macOS:\n# Deactivate and recreate\ndeactivate\nrm -rf venv\npython3 -m venv venv\nsource venv/bin/activate\npip install -r requirements.txt\nWindows:\ndeactivate\nrmdir /s venv\npython -m venv venv\nvenv\\Scripts\\activate\npip install -r requirements.txt\n\n\n\n# Don't use sudo with pip\n# Instead, ensure virtual environment is activated\nsource venv/bin/activate\npip install -r requirements.txt"
+  },
+  {
+    "objectID": "SETUP_GUIDE.html#next-steps",
+    "href": "SETUP_GUIDE.html#next-steps",
+    "title": "🛠️ Setup Guide - Movie List Maker",
+    "section": "",
+    "text": "✅ Verify all dependencies are installed\n✅ Test with a sample video\n📖 Read the README.md for usage examples\n🚀 Process your movie videos!\n🌐 Build and deploy your Quarto website\n\n\nNeed Help? Open an issue on GitHub!"
+  },
+  {
+    "objectID": "SITE_README.html",
+    "href": "SITE_README.html",
+    "title": "Biblioteca de Películas y Series - Sitio Web Quarto",
+    "section": "",
+    "text": "Este sitio web muestra una colección de 257 títulos de películas y series de TV extraídos de transcripciones de audio.\n\n\n\n🔍 Búsqueda Interactiva: Tabla interactiva con Observable JS para buscar y filtrar títulos en tiempo real\n📊 Estadísticas: Resumen de la colección con contadores\n🎬 Enlaces IMDB: Enlaces directos a IMDB cuando los IDs están disponibles\n🎨 Tema Materia: Diseño limpio y profesional orientado a biblioteca\n🌐 En Español: Toda la interfaz está en español\n\n\n\n\n\nBuscar y Filtrar (Primera sección)\n\nTabla interactiva con Observable JS\nBúsqueda en tiempo real\nEnlaces a IMDB\n\nResumen de la Biblioteca\n\nEstadísticas de la colección\nTotal de títulos\nTítulos con datos de IMDB\n\nExplorar por Título\n\nTarjetas organizadas alfabéticamente (A-Z)\nDiseño de cuadrícula responsivo\nEfectos hover\n\n\n\n\n\n\n\nsource venv/bin/activate\nquarto render index.qmd\nEl HTML se generará en docs/index.html\n\n\n\nsource venv/bin/activate\nquarto preview index.qmd --no-browser --port 8080\nLuego abre http://localhost:8080 en tu navegador.\n\n\n\n\n\nindex.qmd - Documento principal de Quarto\nstyles.css - Estilos personalizados para el tema de biblioteca\n_quarto.yml - Configuración de Quarto\nunified_movie_list.json - Datos de las películas (fuente de datos)\n\n\n\n\n\nQuarto: Framework de publicación científica y técnica\nObservable JS: Para la tabla interactiva y búsqueda\nPython: Para procesamiento de datos y generación de contenido\nMateria Theme: Tema Bootstrap Material Design\nCSS personalizado: Para el diseño orientado a biblioteca\n\n\n\n\nEl sitio se genera como HTML estático en la carpeta docs/, lo que lo hace fácil de desplegar en:\n\nGitHub Pages\nNetlify\nVercel\nCualquier servidor de archivos estáticos\n\n\n\n\nPara enriquecer el sitio con datos de IMDB:\n\nObtén una clave API gratuita de OMDB: http://www.omdbapi.com/apikey.aspx\nEjecuta el script de enriquecimiento:\npython enrich_with_imdb.py\nRe-renderiza el sitio para ver los enlaces de IMDB actualizados"
+  },
+  {
+    "objectID": "SITE_README.html#características",
+    "href": "SITE_README.html#características",
+    "title": "Biblioteca de Películas y Series - Sitio Web Quarto",
+    "section": "",
+    "text": "🔍 Búsqueda Interactiva: Tabla interactiva con Observable JS para buscar y filtrar títulos en tiempo real\n📊 Estadísticas: Resumen de la colección con contadores\n🎬 Enlaces IMDB: Enlaces directos a IMDB cuando los IDs están disponibles\n🎨 Tema Materia: Diseño limpio y profesional orientado a biblioteca\n🌐 En Español: Toda la interfaz está en español"
+  },
+  {
+    "objectID": "SITE_README.html#estructura-del-sitio",
+    "href": "SITE_README.html#estructura-del-sitio",
+    "title": "Biblioteca de Películas y Series - Sitio Web Quarto",
+    "section": "",
+    "text": "Buscar y Filtrar (Primera sección)\n\nTabla interactiva con Observable JS\nBúsqueda en tiempo real\nEnlaces a IMDB\n\nResumen de la Biblioteca\n\nEstadísticas de la colección\nTotal de títulos\nTítulos con datos de IMDB\n\nExplorar por Título\n\nTarjetas organizadas alfabéticamente (A-Z)\nDiseño de cuadrícula responsivo\nEfectos hover"
+  },
+  {
+    "objectID": "SITE_README.html#cómo-renderizar-el-sitio",
+    "href": "SITE_README.html#cómo-renderizar-el-sitio",
+    "title": "Biblioteca de Películas y Series - Sitio Web Quarto",
+    "section": "",
+    "text": "source venv/bin/activate\nquarto render index.qmd\nEl HTML se generará en docs/index.html\n\n\n\nsource venv/bin/activate\nquarto preview index.qmd --no-browser --port 8080\nLuego abre http://localhost:8080 en tu navegador."
+  },
+  {
+    "objectID": "SITE_README.html#archivos-principales",
+    "href": "SITE_README.html#archivos-principales",
+    "title": "Biblioteca de Películas y Series - Sitio Web Quarto",
+    "section": "",
+    "text": "index.qmd - Documento principal de Quarto\nstyles.css - Estilos personalizados para el tema de biblioteca\n_quarto.yml - Configuración de Quarto\nunified_movie_list.json - Datos de las películas (fuente de datos)"
+  },
+  {
+    "objectID": "SITE_README.html#tecnologías-utilizadas",
+    "href": "SITE_README.html#tecnologías-utilizadas",
+    "title": "Biblioteca de Películas y Series - Sitio Web Quarto",
+    "section": "",
+    "text": "Quarto: Framework de publicación científica y técnica\nObservable JS: Para la tabla interactiva y búsqueda\nPython: Para procesamiento de datos y generación de contenido\nMateria Theme: Tema Bootstrap Material Design\nCSS personalizado: Para el diseño orientado a biblioteca"
+  },
+  {
+    "objectID": "SITE_README.html#despliegue",
+    "href": "SITE_README.html#despliegue",
+    "title": "Biblioteca de Películas y Series - Sitio Web Quarto",
+    "section": "",
+    "text": "El sitio se genera como HTML estático en la carpeta docs/, lo que lo hace fácil de desplegar en:\n\nGitHub Pages\nNetlify\nVercel\nCualquier servidor de archivos estáticos"
+  },
+  {
+    "objectID": "SITE_README.html#próximos-pasos",
+    "href": "SITE_README.html#próximos-pasos",
+    "title": "Biblioteca de Películas y Series - Sitio Web Quarto",
+    "section": "",
+    "text": "Para enriquecer el sitio con datos de IMDB:\n\nObtén una clave API gratuita de OMDB: http://www.omdbapi.com/apikey.aspx\nEjecuta el script de enriquecimiento:\npython enrich_with_imdb.py\nRe-renderiza el sitio para ver los enlaces de IMDB actualizados"
+  },
+  {
+    "objectID": "quarto_site/index.html",
+    "href": "quarto_site/index.html",
+    "title": "Movie List Collection",
+    "section": "",
+    "text": "Welcome to the Movie List Collection! Browse movies from different Oleadas.\n\n\n\n\nOleada 01\n\n\nGenerated by Movie List Maker"
+  },
+  {
+    "objectID": "quarto_site/index.html#available-oleadas",
+    "href": "quarto_site/index.html#available-oleadas",
+    "title": "Movie List Collection",
+    "section": "",
+    "text": "Oleada 01\n\n\nGenerated by Movie List Maker"
+  },
+  {
+    "objectID": "PRIMING.html",
+    "href": "PRIMING.html",
+    "title": "🎯 System Priming with Expected Movie Count",
+    "section": "",
+    "text": "Improve accuracy by telling the system how many movies to expect.\n\n\nWhen you know the number of movies in advance, the system can:\n✅ Adjust scene detection - Fine-tune threshold to match expected count ✅ Validate results - Warn if count doesn’t match ✅ Filter duplicates - Keep top N by confidence if too many found ✅ Guide LLM - Tell LLM exactly how many titles to extract ✅ Catch errors - Alert if movies are missing\n\n\n\n\n\n# You know there are 5 movies in the video\npython main.py video.mp4 --oleada 1 --expected-movies 5\n\n\n\n# Tell LLM to extract exactly 5 titles\npython main.py video.mp4 --oleada 1 --audio-only --expected-movies 5\n\n\n\n# Process multiple videos, each with 5 movies\npython main.py video1.mp4 video2.mp4 video3.mp4 --starting-oleada 1 --expected-movies 5\n\n\n\n\n\n\n📹 Step 1/5: Detecting scene changes...\n   Target: 5 movies\n   Detected 10 scene segments\n   ⚠️  Detected 10 scenes but expected 5\n   Adjusting scene detection threshold...\n   Adjusted to 5 scenes\nLogic: - Too many scenes → Increase threshold (less sensitive) - Too few scenes → Decrease threshold (more sensitive)\n\n\n\n✅ Step 5/5: Matching and validating titles...\n   Expected: 5 movies, Found: 7 matches\n   ⚠️  Found 2 extra matches\n   Filtering to top 5 by confidence...\nLogic: - More than expected → Keep top N by confidence - Less than expected → Warn user to check\n\n\n\nWithout priming:\nYour task:\n1. Extract all movie titles mentioned in the transcription\nWith priming:\nExpected number of movies: 5\n\nYour task:\n1. Extract all movie titles mentioned in the transcription\n5. Extract exactly 5 movie titles\n\n\n\n\n\n\npython main.py video.mp4 --oleada 1 --expected-movies 5 --whisper-model tiny\n📹 Step 1/5: Detecting scene changes...\n   Target: 5 movies\n   Detected 5 scene segments ✅\n   \n✅ Step 5/5: Matching and validating titles...\n   Expected: 5 movies, Found: 5 matches ✅\n\n\n\n📹 Step 1/5: Detecting scene changes...\n   Target: 5 movies\n   Detected 8 scene segments\n   ⚠️  Detected 8 scenes but expected 5\n   Adjusting scene detection threshold...\n   Adjusted to 5 scenes\n\n\n\n✅ Step 5/5: Matching and validating titles...\n   Expected: 5 movies, Found: 3 matches\n   ⚠️  Missing 2 movies\n   Suggestion: Check if some scenes were missed or OCR/audio failed\n   \n   ⚠️  Final count: 3 (expected 5)\n   Consider: --audio-only mode or manual review\n\n\n\n\n\n\n✅ Use when: - You know the exact number of movies - Video has consistent format (e.g., Oleada series) - You want automatic validation - Processing multiple similar videos\n❌ Don’t use when: - Number of movies varies - Exploratory processing - Unknown video format\n\n\n\n\nFirst video: Process without --expected-movies to discover count\nSubsequent videos: Use --expected-movies for consistency\nBatch processing: Apply same count to similar videos\n\n\n\n\n# Full optimization for 5-movie video\npython main.py video.mp4 --oleada 1 \\\n  --expected-movies 5 \\\n  --whisper-model tiny \\\n  --language es \\\n  --frame-interval 30\n\n\n\n\n\n\nSolution: The threshold auto-adjusts, but if still wrong: - Check if video has transitions/effects between movies - Verify actual movie count in video - Try --audio-only mode as fallback\n\n\n\nPossible causes: 1. OCR failed on some covers 2. Audio unclear for some titles 3. Scene detection missed transitions\nSolutions:\n# Try audio-only mode\npython main.py video.mp4 --oleada 1 --audio-only --expected-movies 5\n\n# Lower frame interval for more samples\npython main.py video.mp4 --oleada 1 --expected-movies 5 --frame-interval 15\n\n# Use interactive mode to manually input\npython main.py video.mp4 --oleada 1 --expected-movies 5\n\n\n\nSolution: System automatically keeps top N by confidence, but verify results.\n\n\n\n\nIf auto-adjustment doesn’t work, you can modify the thresholds in the code:\n# In movie_processor.py\nif len(scenes) &gt; self.expected_movie_count:\n    scenes = self.video_processor.detect_scene_changes(video_path, threshold=40.0)  # Adjust this\nelse:\n    scenes = self.video_processor.detect_scene_changes(video_path, threshold=20.0)  # Adjust this\n\n\n\n\n\n\nWithout Priming\nWith Priming\n\n\n\n\nAccepts any scene count\nValidates against expected\n\n\nNo threshold adjustment\nAuto-adjusts detection\n\n\nNo result filtering\nFilters to top N\n\n\nGeneric LLM prompt\nTargeted LLM extraction\n\n\nNo warnings\nAlerts on mismatches\n\n\n\nRecommendation: Always use --expected-movies when you know the count!\n\nExample for your 5-movie video:\npython main.py testo.mp4 --oleada 1 --whisper-model tiny --expected-movies 5"
+  },
+  {
+    "objectID": "PRIMING.html#why-prime-the-system",
+    "href": "PRIMING.html#why-prime-the-system",
+    "title": "🎯 System Priming with Expected Movie Count",
+    "section": "",
+    "text": "When you know the number of movies in advance, the system can:\n✅ Adjust scene detection - Fine-tune threshold to match expected count ✅ Validate results - Warn if count doesn’t match ✅ Filter duplicates - Keep top N by confidence if too many found ✅ Guide LLM - Tell LLM exactly how many titles to extract ✅ Catch errors - Alert if movies are missing"
+  },
+  {
+    "objectID": "PRIMING.html#usage",
+    "href": "PRIMING.html#usage",
+    "title": "🎯 System Priming with Expected Movie Count",
+    "section": "",
+    "text": "# You know there are 5 movies in the video\npython main.py video.mp4 --oleada 1 --expected-movies 5\n\n\n\n# Tell LLM to extract exactly 5 titles\npython main.py video.mp4 --oleada 1 --audio-only --expected-movies 5\n\n\n\n# Process multiple videos, each with 5 movies\npython main.py video1.mp4 video2.mp4 video3.mp4 --starting-oleada 1 --expected-movies 5"
+  },
+  {
+    "objectID": "PRIMING.html#how-it-works",
+    "href": "PRIMING.html#how-it-works",
+    "title": "🎯 System Priming with Expected Movie Count",
+    "section": "",
+    "text": "📹 Step 1/5: Detecting scene changes...\n   Target: 5 movies\n   Detected 10 scene segments\n   ⚠️  Detected 10 scenes but expected 5\n   Adjusting scene detection threshold...\n   Adjusted to 5 scenes\nLogic: - Too many scenes → Increase threshold (less sensitive) - Too few scenes → Decrease threshold (more sensitive)\n\n\n\n✅ Step 5/5: Matching and validating titles...\n   Expected: 5 movies, Found: 7 matches\n   ⚠️  Found 2 extra matches\n   Filtering to top 5 by confidence...\nLogic: - More than expected → Keep top N by confidence - Less than expected → Warn user to check\n\n\n\nWithout priming:\nYour task:\n1. Extract all movie titles mentioned in the transcription\nWith priming:\nExpected number of movies: 5\n\nYour task:\n1. Extract all movie titles mentioned in the transcription\n5. Extract exactly 5 movie titles"
+  },
+  {
+    "objectID": "PRIMING.html#example-outputs",
+    "href": "PRIMING.html#example-outputs",
+    "title": "🎯 System Priming with Expected Movie Count",
+    "section": "",
+    "text": "python main.py video.mp4 --oleada 1 --expected-movies 5 --whisper-model tiny\n📹 Step 1/5: Detecting scene changes...\n   Target: 5 movies\n   Detected 5 scene segments ✅\n   \n✅ Step 5/5: Matching and validating titles...\n   Expected: 5 movies, Found: 5 matches ✅\n\n\n\n📹 Step 1/5: Detecting scene changes...\n   Target: 5 movies\n   Detected 8 scene segments\n   ⚠️  Detected 8 scenes but expected 5\n   Adjusting scene detection threshold...\n   Adjusted to 5 scenes\n\n\n\n✅ Step 5/5: Matching and validating titles...\n   Expected: 5 movies, Found: 3 matches\n   ⚠️  Missing 2 movies\n   Suggestion: Check if some scenes were missed or OCR/audio failed\n   \n   ⚠️  Final count: 3 (expected 5)\n   Consider: --audio-only mode or manual review"
+  },
+  {
+    "objectID": "PRIMING.html#best-practices",
+    "href": "PRIMING.html#best-practices",
+    "title": "🎯 System Priming with Expected Movie Count",
+    "section": "",
+    "text": "✅ Use when: - You know the exact number of movies - Video has consistent format (e.g., Oleada series) - You want automatic validation - Processing multiple similar videos\n❌ Don’t use when: - Number of movies varies - Exploratory processing - Unknown video format\n\n\n\n\nFirst video: Process without --expected-movies to discover count\nSubsequent videos: Use --expected-movies for consistency\nBatch processing: Apply same count to similar videos\n\n\n\n\n# Full optimization for 5-movie video\npython main.py video.mp4 --oleada 1 \\\n  --expected-movies 5 \\\n  --whisper-model tiny \\\n  --language es \\\n  --frame-interval 30"
+  },
+  {
+    "objectID": "PRIMING.html#troubleshooting",
+    "href": "PRIMING.html#troubleshooting",
+    "title": "🎯 System Priming with Expected Movie Count",
+    "section": "",
+    "text": "Solution: The threshold auto-adjusts, but if still wrong: - Check if video has transitions/effects between movies - Verify actual movie count in video - Try --audio-only mode as fallback\n\n\n\nPossible causes: 1. OCR failed on some covers 2. Audio unclear for some titles 3. Scene detection missed transitions\nSolutions:\n# Try audio-only mode\npython main.py video.mp4 --oleada 1 --audio-only --expected-movies 5\n\n# Lower frame interval for more samples\npython main.py video.mp4 --oleada 1 --expected-movies 5 --frame-interval 15\n\n# Use interactive mode to manually input\npython main.py video.mp4 --oleada 1 --expected-movies 5\n\n\n\nSolution: System automatically keeps top N by confidence, but verify results."
+  },
+  {
+    "objectID": "PRIMING.html#advanced-custom-thresholds",
+    "href": "PRIMING.html#advanced-custom-thresholds",
+    "title": "🎯 System Priming with Expected Movie Count",
+    "section": "",
+    "text": "If auto-adjustment doesn’t work, you can modify the thresholds in the code:\n# In movie_processor.py\nif len(scenes) &gt; self.expected_movie_count:\n    scenes = self.video_processor.detect_scene_changes(video_path, threshold=40.0)  # Adjust this\nelse:\n    scenes = self.video_processor.detect_scene_changes(video_path, threshold=20.0)  # Adjust this"
+  },
+  {
+    "objectID": "PRIMING.html#summary",
+    "href": "PRIMING.html#summary",
+    "title": "🎯 System Priming with Expected Movie Count",
+    "section": "",
+    "text": "Without Priming\nWith Priming\n\n\n\n\nAccepts any scene count\nValidates against expected\n\n\nNo threshold adjustment\nAuto-adjusts detection\n\n\nNo result filtering\nFilters to top N\n\n\nGeneric LLM prompt\nTargeted LLM extraction\n\n\nNo warnings\nAlerts on mismatches\n\n\n\nRecommendation: Always use --expected-movies when you know the count!\n\nExample for your 5-movie video:\npython main.py testo.mp4 --oleada 1 --whisper-model tiny --expected-movies 5"
+  }
+]
