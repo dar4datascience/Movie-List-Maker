@@ -1,0 +1,115 @@
+---
+title: "Biblioteca de Películas y Series"
+subtitle: "Una colección curada de 257 títulos"
+format:
+  html:
+    theme: materia
+    toc: true
+    toc-location: left
+    toc-title: "Navegar"
+    code-fold: true
+    page-layout: full
+    css: styles.css
+---
+
+```{python}
+#| echo: false
+import json
+import pandas as pd
+
+# Load the movie list
+with open('unified_movie_list.json', 'r', encoding='utf-8') as f:
+    movies = json.load(f)
+
+# Convert to DataFrame for easier manipulation
+df = pd.DataFrame(movies)
+
+# Add first letter for alphabetical grouping
+df['first_letter'] = df['title'].str[0].str.upper()
+
+# Statistics
+total_movies = len(df)
+movies_with_id = df['imdbID'].astype(bool).sum()
+```
+
+## Buscar y Filtrar
+
+```{ojs}
+//| echo: false
+
+// Load movie data
+movieData = FileAttachment("unified_movie_list.json").json()
+
+// Create search input
+viewof searchText = Inputs.search(movieData, {
+  placeholder: "Buscar títulos...",
+  columns: ["title"]
+})
+
+// Display filtered results in a table
+Inputs.table(searchText, {
+  columns: ["record_number", "title", "imdbID"],
+  header: {
+    record_number: "#",
+    title: "Título",
+    imdbID: "IMDB ID"
+  },
+  width: {
+    record_number: 80,
+    title: 600,
+    imdbID: 120
+  },
+  format: {
+    imdbID: id => id ? htl.html`<a href="https://www.imdb.com/title/${id}/" target="_blank">🎬 Ver</a>` : ""
+  }
+})
+```
+
+## Resumen de la Biblioteca
+
+::: {.callout-note icon=false}
+## 📊 Estadísticas de la Colección
+
+- **Total de Títulos**: `{python} total_movies`
+- **Películas y Series**: `{python} total_movies`
+- **Con Datos de IMDB**: `{python} movies_with_id`
+:::
+
+## Explorar por Título
+
+```{python}
+#| echo: false
+#| output: asis
+
+# Group by first letter
+grouped = df.groupby('first_letter')
+
+for letter, group in sorted(grouped):
+    print(f"\n### {letter}\n")
+    print('<div class="movie-grid">\n')
+    
+    for idx, row in group.iterrows():
+        title = row['title']
+        record_num = row['record_number']
+        imdb_id = row.get('imdbID', '')
+        
+        # Create card for each movie
+        print('<div class="movie-card">\n')
+        print(f'  <div class="movie-number">#{record_num}</div>\n')
+        print(f'  <div class="movie-title">{title}</div>\n')
+        
+        if imdb_id:
+            print(f'  <div class="movie-links">\n')
+            print(f'    <a href="https://www.imdb.com/title/{imdb_id}/" target="_blank" class="imdb-link">🎬 IMDB</a>\n')
+            print(f'  </div>\n')
+        
+        print('</div>\n')
+    
+    print('</div>\n')
+```
+
+---
+
+<div class="footer">
+Generado a partir de transcripciones de audio • Total: `{python} total_movies` títulos
+</div>

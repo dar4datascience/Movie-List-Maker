@@ -1,0 +1,22 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Peliculas a Donar"
+  navbar:
+    background: primary
+    left:
+      - text: "Home"
+        href: index.qmd
+    right:
+      - icon: github
+        href: https://github.com
+
+format:
+  html:
+    theme: 
+      light: pulse
+      dark: minty
+    css: styles.css
+    toc: true
