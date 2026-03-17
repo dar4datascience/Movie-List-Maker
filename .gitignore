@@ -221,3 +221,4 @@ profile.stats
 /.quarto/
 
 docs/*
+site_libs/*

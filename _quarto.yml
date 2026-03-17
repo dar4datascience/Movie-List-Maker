@@ -7,7 +7,7 @@ website:
   navbar:
     background: primary
     left:
-      - text: "Home"
+      - text: "Catalogo"
         href: index.qmd
     right:
       - icon: github
