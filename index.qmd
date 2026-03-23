@@ -65,6 +65,8 @@ Inputs.table(searchText, {
 })
 ```
 
+<a href="movie_list.csv" download="movie_list.csv" class="btn btn-primary" style="margin-bottom: 20px;">Descargar Lista (CSV)</a>
+
 ## Resumen de la Biblioteca
 
 ::: {.callout-note icon=false}
