@@ -102,14 +102,14 @@
     "href": "index.html",
     "title": "Biblioteca de Películas y Series",
     "section": "",
-    "text": "Code\nmovieData = FileAttachment(\"unified_movie_list.json\").json()\n\n// Create search input\nviewof searchText = Inputs.search(movieData, {\n  placeholder: \"Buscar títulos...\",\n  columns: [\"title\"]\n})\n\n// Display filtered results in a table\nInputs.table(searchText, {\n  columns: [\"record_number\", \"title\", \"imdbID\"],\n  header: {\n    record_number: \"#\",\n    title: \"Título\",\n    imdbID: \"IMDB ID\"\n  },\n  width: {\n    record_number: 80,\n    title: 600,\n    imdbID: 120\n  },\n  format: {\n    imdbID: id =&gt; id ? htl.html`&lt;a href=\"https://www.imdb.com/title/${id}/\" target=\"_blank\"&gt;🎬 Ver&lt;/a&gt;` : \"\"\n  }\n})"
+    "text": "Code\nmovieData = FileAttachment(\"unified_movie_list.json\").json()\n\n// Create search input\nviewof searchText = Inputs.search(movieData, {\n  placeholder: \"Buscar títulos...\",\n  columns: [\"title\"]\n})\n\n// Display filtered results in a table\nInputs.table(searchText, {\n  columns: [\"record_number\", \"title\", \"imdbID\"],\n  header: {\n    record_number: \"#\",\n    title: \"Título\",\n    imdbID: \"IMDB ID\"\n  },\n  width: {\n    record_number: 80,\n    title: 600,\n    imdbID: 120\n  },\n  format: {\n    imdbID: id =&gt; id ? htl.html`&lt;a href=\"https://www.imdb.com/title/${id}/\" target=\"_blank\"&gt;🎬 Ver&lt;/a&gt;` : \"\"\n  }\n})\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDescargar Lista (CSV)"
   },
   {
     "objectID": "index.html#buscar-y-filtrar",
     "href": "index.html#buscar-y-filtrar",
     "title": "Biblioteca de Películas y Series",
     "section": "",
-    "text": "Code\nmovieData = FileAttachment(\"unified_movie_list.json\").json()\n\n// Create search input\nviewof searchText = Inputs.search(movieData, {\n  placeholder: \"Buscar títulos...\",\n  columns: [\"title\"]\n})\n\n// Display filtered results in a table\nInputs.table(searchText, {\n  columns: [\"record_number\", \"title\", \"imdbID\"],\n  header: {\n    record_number: \"#\",\n    title: \"Título\",\n    imdbID: \"IMDB ID\"\n  },\n  width: {\n    record_number: 80,\n    title: 600,\n    imdbID: 120\n  },\n  format: {\n    imdbID: id =&gt; id ? htl.html`&lt;a href=\"https://www.imdb.com/title/${id}/\" target=\"_blank\"&gt;🎬 Ver&lt;/a&gt;` : \"\"\n  }\n})"
+    "text": "Code\nmovieData = FileAttachment(\"unified_movie_list.json\").json()\n\n// Create search input\nviewof searchText = Inputs.search(movieData, {\n  placeholder: \"Buscar títulos...\",\n  columns: [\"title\"]\n})\n\n// Display filtered results in a table\nInputs.table(searchText, {\n  columns: [\"record_number\", \"title\", \"imdbID\"],\n  header: {\n    record_number: \"#\",\n    title: \"Título\",\n    imdbID: \"IMDB ID\"\n  },\n  width: {\n    record_number: 80,\n    title: 600,\n    imdbID: 120\n  },\n  format: {\n    imdbID: id =&gt; id ? htl.html`&lt;a href=\"https://www.imdb.com/title/${id}/\" target=\"_blank\"&gt;🎬 Ver&lt;/a&gt;` : \"\"\n  }\n})\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDescargar Lista (CSV)"
   },
   {
     "objectID": "index.html#resumen-de-la-biblioteca",
